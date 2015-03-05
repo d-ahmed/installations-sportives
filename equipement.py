@@ -1,3 +1,4 @@
+import mysql.connector.errors as Error
 
 class Equipement:
 
@@ -20,10 +21,7 @@ class Equipement:
 
                         
 	def dropTableEquipement(self):
-                try:
-                        self.database.execute("DROP TABLE IF EXISTS equipement")
-                except Exception:
-                        print ("Table inexistante")
+		self.database.execute("DROP TABLE IF EXISTS equipement")
 
                         
 	def deleInTableEquipement(self,idEquipement):
@@ -41,9 +39,12 @@ class Equipement:
 	def addCle_Etrangere(self):
 		try:
 			self.database.execute("ALTER TABLE equipement ADD CONSTRAINT numeroInstallation_activite FOREIGN KEY  (numeroInstallation_activite) REFERENCES installations(numeroInstallation)")
-		except Exception :
+		except Exception:
 			print("this key is already exist")
 		
 
 	def dropCle_Etrangere(self):
-		self.database.execute("ALTER TABLE equipement DROP FOREIGN KEY numeroInstallation_activite")
+		try:
+			self.database.execute("ALTER TABLE equipement DROP FOREIGN KEY numeroInstallation_activite")
+		except Error.DatabaseError:
+			print("TABLE equipement : clef etrangere inexistante")
