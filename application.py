@@ -6,12 +6,24 @@ import activite
 import equipements_activites
 
 
+print ("daniel ou aurelie ?")
+prenom = input()
+print ("Entrer votre mots de passe")
+password = input()
+
+myDataBase=Dao.Dao()
+if(prenom=="aurelie"):
+	myDataBase.connexion('infoweb', 'E134705T', 'E134705T', password)
+else:
+	myDataBase.connexion('localhost', 'CreationService', 'root', password)
+
+
+
 def createTables():
 	'''
 		Fonction qui cree les tables installation, equipement et equipements_activites
 	'''
-	myDataBase=Dao.Dao()
-	myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
+
 	# On récupère les curseurs pour l'initialisation des classes
 	inst=installation.Installation(myDataBase.getCursor())
 	equip=equipement.Equipement(myDataBase.getCursor())
@@ -29,8 +41,7 @@ def dropTables():
 	'''
 		Fonction qui detruit les tables installation, equipement et equipements_activites
 	'''
-	myDataBase=Dao.Dao()
-	myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
+
 	# On récupère les curseurs pour l'initialisation des classes
 	inst=installation.Installation(myDataBase.getCursor())
 	equip=equipement.Equipement(myDataBase.getCursor())
@@ -45,8 +56,7 @@ def dropTables():
 	
 
 def addConstraintKeys():
-	myDataBase=Dao.Dao()
-	myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
+	
 	equip=equipement.Equipement(myDataBase.getCursor())
 	activit=activite.Activite(myDataBase.getCursor())
 
@@ -54,8 +64,7 @@ def addConstraintKeys():
 	equip.addCle_Etrangere()
 
 def dropConstraintKeys():
-	myDataBase=Dao.Dao()
-	myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
+	
 	equip=equipement.Equipement(myDataBase.getCursor())
 	activit=activite.Activite(myDataBase.getCursor())
 
@@ -67,8 +76,7 @@ def application():
 	"""
 		test de la classe Installation
 	"""
-	myDataBase=Dao.Dao()
-	myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
+	
 	inst=installation.Installation(myDataBase.getCursor())
 	equip=equipement.Equipement(myDataBase.getCursor())
 	equip_activ=equipements_activites.Equipements_activites(myDataBase.getCursor())
@@ -102,7 +110,6 @@ def application():
 		equipements_activites_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
 		next(equipements_activites_tableReader,None)
 		for row in equipements_activites_tableReader:
-			#equip_activ.insertInTableEquipements_activites(row[4],row[5],row[2])
 			equip_activ.insertInTableEquipements_Assoc_activites(row[4],row[2])	
 	csvfile.close()
 
