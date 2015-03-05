@@ -1,4 +1,5 @@
 from decimal import *
+import mysql.connector as Error
 
 class Installation :
 
@@ -20,8 +21,8 @@ class Installation :
 	def insertInTableInstallation(self,numeroInstallation,nomInstallation,adresse,code_postal,ville,latitude,longitude):
 		try:
 			self.database.execute("INSERT INTO installations (numeroInstallation,nomInstallation,adresse,code_postal,ville,latitude,longitude) VALUES (%s,%s,%s,%s,%s,%s,%s)",(numeroInstallation,nomInstallation,adresse,code_postal,ville,latitude,longitude))
-		except Exception:
-			print("Vous ne pouvez pas rentrer deux numeroInstallation identique")
+		except Error.errors.IntegrityError:
+			print("Installation n° "+numeroInstallation+" existe deja")
 
 
                         
@@ -29,10 +30,10 @@ class Installation :
 		self.database.execute("DROP TABLE IF EXISTS installations")
 
 	def deleInTableInstallation(self,numeroInstallation):
-                try:
-                        delf.database.execute("DELETE FROM installations WHERE installations.numeroInstallation=(%s)",(numeroInstallation,))
-                except Exception:
-                        print("Ce numeroInstallation n'existe pas")
+		try:
+			delf.database.execute("DELETE FROM installations WHERE installations.numeroInstallation=(%s)",(numeroInstallation,))
+		except Exception:
+			print("Ce numeroInstallation n'existe pas")
 
                         
 
