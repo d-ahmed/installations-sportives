@@ -1,9 +1,10 @@
-import installation
-import Dao
+from model import installation
+from model import Dao 
 import csv
-import equipement
-import activite
-import equipements_activites
+from model import equipement
+from model import activite
+from model import equipements_activites
+
 
 
 print ("daniel ou aurelie ?")
@@ -17,19 +18,18 @@ if(prenom=="aurelie"):
 else:
 	myDataBase.connexion('localhost', 'CreationService', 'root', password)
 
+	# On récupère les curseurs pour l'initialisation des classes
+inst=installation.Installation(myDataBase.getCursor())
+equip=equipement.Equipement(myDataBase.getCursor())
+equip_activ=equipements_activites.Equipements_activites(myDataBase.getCursor())
+activit=activite.Activite(myDataBase.getCursor())
+
 
 
 def createTables():
 	'''
 		Fonction qui cree les tables installation, equipement et equipements_activites
 	'''
-
-	# On récupère les curseurs pour l'initialisation des classes
-	inst=installation.Installation(myDataBase.getCursor())
-	equip=equipement.Equipement(myDataBase.getCursor())
-	equip_activ=equipements_activites.Equipements_activites(myDataBase.getCursor())
-	activit=activite.Activite(myDataBase.getCursor())
-
 	# Création des tables
 	inst.createTableInstallation()
 	equip.createTableEquipement()
@@ -42,12 +42,6 @@ def dropTables():
 		Fonction qui detruit les tables installation, equipement et equipements_activites
 	'''
 
-	# On récupère les curseurs pour l'initialisation des classes
-	inst=installation.Installation(myDataBase.getCursor())
-	equip=equipement.Equipement(myDataBase.getCursor())
-	equip_activ=equipements_activites.Equipements_activites(myDataBase.getCursor())
-	activit=activite.Activite(myDataBase.getCursor())
-
 	inst.dropTableInstallation()
 	equip.dropTableEquipement()
 	equip_activ.dropTableEquipements_Assoc_activites()
@@ -56,31 +50,21 @@ def dropTables():
 	
 
 def addConstraintKeys():
-	
-	equip=equipement.Equipement(myDataBase.getCursor())
-	activit=activite.Activite(myDataBase.getCursor())
-
-	activit.addCle_Etrangere()
-	equip.addCle_Etrangere()
+	equip.addCle_EtrangereInstallation()
+	equip_activ.addCle_Etrangere_Equipement()
+	equip_activ.addCle_Etrangere_Activite()
 
 def dropConstraintKeys():
-	
-	equip=equipement.Equipement(myDataBase.getCursor())
-	activit=activite.Activite(myDataBase.getCursor())
 
-	equip.dropCle_Etrangere()
-	activit.dropCle_Etrangere()
+	equip.dropCle_EtrangereInstallation()
+	equip_activ.dropCle_Etrangere_Equipement()
+	equip_activ.dropCle_Etrangere_Activite()
 
 
 def application():
 	"""
 		test de la classe Installation
 	"""
-	
-	inst=installation.Installation(myDataBase.getCursor())
-	equip=equipement.Equipement(myDataBase.getCursor())
-	equip_activ=equipements_activites.Equipements_activites(myDataBase.getCursor())
-	activit=activite.Activite(myDataBase.getCursor())
 
 	with open('./csv/installations_table.csv','rt') as csvfile:
 		installations_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -131,6 +115,7 @@ def application():
 
 	myDataBase.commit()
 	myDataBase.deconnexion()
+
 
 
 createTables()
