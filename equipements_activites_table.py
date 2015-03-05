@@ -75,4 +75,10 @@ class Equipements_activites:
 			print("le numero n'existe pas")
 
 	def addCle_Etrangere(self):
-		self.database.execute("ALTER TABLE equipements_activites ADD FOREIGN KEY (idEquipement_Activite) REFERENCES equipement(idEquipement)")
+		try:
+			self.database.execute("ALTER TABLE equipements_activites ADD CONSTRAINT idEquipement_Activite FOREIGN KEY (idEquipement_Activite) REFERENCES equipement(idEquipement)")
+		except Exception :
+			print("this key is already exist")
+
+	def dropCle_Etrangere(self):
+		self.database.execute("ALTER TABLE equipements_activites DROP FOREIGN KEY idEquipement_Activite ")

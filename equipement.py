@@ -39,4 +39,11 @@ class Equipement:
 			print (row)
 
 	def addCle_Etrangere(self):
-		self.database.execute("ALTER TABLE equipement ADD FOREIGN KEY (numeroInstallation_activite) REFERENCES installations(numeroInstallation)")
+		try:
+			self.database.execute("ALTER TABLE equipement ADD CONSTRAINT numeroInstallation_activite FOREIGN KEY  (numeroInstallation_activite) REFERENCES installations(numeroInstallation)")
+		except Exception :
+			print("this key is already exist")
+		
+
+	def dropCle_Etrangere(self):
+		self.database.execute("ALTER TABLE equipement DROP FOREIGN KEY numeroInstallation_activite")
