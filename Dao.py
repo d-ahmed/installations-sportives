@@ -1,19 +1,19 @@
-import pymysql as mysql
+import mysql.connector as mysql
 
 
 class Dao:
 
 	def __init__(self):
-		self.conn=self.connexion('localhost','root','elnida','CreationService',)
-		self.cur=self.conn.cursor()
-
+		#self.conn=self.connexion('localhost','root','elnida','CreationService',)
+		#self.cur=self.conn.cursor()
 
 	def connexion(self,host,user,passwd,db):
 		try:
-			connect=mysql.connect(host=host,user=user,passwd=passwd,db=db)
+			self.conn=mysql.connect(host=host,database=db,user=user,password=password)
+			self.cur=self.conn.cursor()
 		except Exception:
 			print ("e.str")
-		return connect
+		
 
 
 	def deconnexion(self):
