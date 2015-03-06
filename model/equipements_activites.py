@@ -9,7 +9,7 @@ class Equipements_activites:
 
 	def createTableEquipements_Assoc_activites(self):
 		try:
-			self.database.execute("CREATE TABLE equipements_Assoc_activites(codeActivite integer , idEquipement_Activite integer, PRIMARY KEY (codeActivite))")
+			self.database.execute("CREATE TABLE equipements_Assoc_activites(codeActivite integer , idEquipement_Activite integer)")
 		except Exception:
 			print ('La table existe déjà')
 
