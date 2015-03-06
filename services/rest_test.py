@@ -13,13 +13,7 @@ import Dao
 
 @route('/installation', method='GET')
 def recherche():
-	return 	"""
-				<form action="/installation/installation" method="post">
-					Ville : <input name="ville" type="text"/>
-					Activite : <input name="activite" />
-					<input type="submit" value="envoyer"/>
-				</form>
-			"""
+	return 	bottle.template('debut')+bottle.template('recherche')+bottle.template('fin')
 
 
 
