@@ -5,7 +5,7 @@ import mysql.connector as mysql
 from mysql.connector import Error
 import sys
 sys.path.append("/home/daniel/Documents/Creation_D_application/with_mysql/model")
-bottle.TEMPLATE_PATH.insert(0, "/home/daniel/Documents/Creation_D_application/with_mysql/services/vue/html/")
+bottle.TEMPLATE_PATH.insert(0, "/home/daniel/Documents/Creation_D_application/with_mysql/vue/html/")
 
 import Dao
 
