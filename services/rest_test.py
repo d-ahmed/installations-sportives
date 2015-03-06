@@ -42,7 +42,7 @@ def getInstallation():
     	cur.execute("Select inst.nomInstallation, inst.adresse, inst.code_postal FROM installations inst WHERE ville LIKE %s and inst.numeroInstallation in(Select equip.numeroInstallation_activite from equipement equip, equipements_Assoc_activites equipActivite where equip.idEquipement=equipActivite.idEquipement_Activite and equipActivite.codeActivite in (select codeActivite from activite where libeleActivite LIKE %s))",(ville,activite))
     	rows = cur.fetchall()
     	sort={}
-    	sortStr=bottle.template('debut')
+    	sortStr=bottle.template('debut')+"<h1>"+activite+" à "+ville+".</h1>"
     	for membre in rows:
     		sort['installation']=(membre[0])
     		sort['adresse']=(membre[1])
@@ -50,7 +50,7 @@ def getInstallation():
     		sort['ville']=(ville)
     		sort['activite']=(activite)
     		#print (sort)
-    		sortStr=sortStr+bottle.template('affiche', installation=(membre[0]),ville=(membre[1]),activite=activite,adresse=(membre[1]),code_postal=(membre[2]))
+    		sortStr=sortStr+bottle.template('affiche', installation=(membre[0]),ville=ville,activite=activite,adresse=(membre[1]),code_postal=(membre[2]))
     	sortStr=sortStr+bottle.template('fin')
     	if rows:
     		#return json.dumps(sort,indent=0)
