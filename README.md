@@ -1,4 +1,4 @@
-<h6>But du projet</h6>
+<h4>But du projet</h4>
 Le projet consiste à récupérer des ressources libre sur internet concernant les activités sportives pratiqué dans la Loire Atlantique, de les analyser et concevoir un service web.
 
 
