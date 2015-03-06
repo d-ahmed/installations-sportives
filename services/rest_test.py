@@ -14,7 +14,7 @@ import Dao
 @route('/installation', method='GET')
 def recherche():
 	return 	"""
-				<form action="/installation" method="post">
+				<form action="/installation/installation" method="post">
 					Ville : <input name="ville" type="text"/>
 					Activite : <input name="activite" />
 					<input type="submit" value="envoyer"/>
@@ -23,7 +23,7 @@ def recherche():
 
 
 
-@route('/installation', method='POST')
+@route('/installation/installation', method='POST')
 def getInstallation():
     """ 
     Convert given text to uppercase
@@ -45,17 +45,21 @@ def getInstallation():
     	cur.execute("Select inst.nomInstallation, inst.adresse, inst.code_postal FROM installations inst WHERE ville LIKE %s and inst.numeroInstallation in(Select equip.numeroInstallation_activite from equipement equip, equipements_Assoc_activites equipActivite where equip.idEquipement=equipActivite.idEquipement_Activite and equipActivite.codeActivite in (select codeActivite from activite where libeleActivite LIKE %s))",(ville,activite))
     	rows = cur.fetchall()
     	sort={}
+    	sortStr=bottle.template('debut')
     	for membre in rows:
     		sort['installation']=(membre[0])
     		sort['adresse']=(membre[1])
     		sort['code_postal']=(membre[2])
     		sort['ville']=(ville)
     		sort['activite']=(activite)
-    		print (sort)
-
+    		#print (sort)
+    		sortStr=sortStr+bottle.template('affiche', installation=(membre[0]),ville=(membre[1]),activite=activite,adresse=(membre[1]),code_postal=(membre[2]))
+    	sortStr=sortStr+bottle.template('fin')
     	if rows:
     		#return json.dumps(sort,indent=0)
-    		return json.dumps(sort,indent=0)
+    		#json.dumps(sort,indent=0)
+    		return """<html>"""+sortStr+""" </html>"""
+
     	else:
     		return """
     					<p>Non trouvé</p>
