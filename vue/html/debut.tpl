@@ -11,7 +11,7 @@
 		}
 
 		.contentInstallation:hover{
-			background-color: rgba(0, 0, 255, 0.2);
+			background-color: rgba(198, 0206, 205, 0.2);
 			transition-duration: 0.2s;
 			cursor:  pointer;
 		}
