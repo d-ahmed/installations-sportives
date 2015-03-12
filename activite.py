@@ -23,7 +23,6 @@ class Activite:
 	def dropTableActivite(self):
 		self.database.execute("DROP TABLE IF EXISTS activite")
 
-
                         
 	def deleInTableActivite(self,codeActivite):
 		try:
