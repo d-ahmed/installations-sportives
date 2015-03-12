@@ -1,0 +1,127 @@
+from model import installation
+from model import Dao 
+import csv
+from model import equipement
+from model import activite
+from model import equipements_activites
+
+
+# connexion a la base de donnee en fonction de l'utilisateur
+print ("daniel ou aurelie ?")
+prenom = input()
+print ("Entrer votre mots de passe")
+password = input()
+
+myDataBase=Dao.Dao()
+if(prenom=="aurelie"):
+	myDataBase.connexion('infoweb', 'E134705T', 'E134705T', password)
+else:
+	myDataBase.connexion('localhost', 'CreationService', 'root', password)
+
+# On récupère les curseurs pour l'initialisation des classes
+curseurInstallation = installation.Installation(myDataBase.getCursor())
+curseurEquipement = equipement.Equipement(myDataBase.getCursor())
+curseurEquipementActivite = equipements_activites.Equipements_activites(myDataBase.getCursor())
+curseurActivite = activite.Activite(myDataBase.getCursor())
+
+
+
+def createTables():
+	'''
+		Fonction qui cree les tables installation, equipement et equipements_activites
+	'''
+	# Création des tables
+	curseurInstallation.createTableInstallation()
+	curseurEquipement.createTableEquipement()
+	curseurEquipementActivite.createTableEquipements_Assoc_activites()
+	curseurActivite.createTableActivite()
+
+
+def dropTables():
+	'''
+		Fonction qui detruit les tables installation, equipement et equipements_activites
+	'''
+
+	curseurInstallation.dropTableInstallation()
+	curseurEquipement.dropTableEquipement()
+	curseurEquipementActivite.dropTableEquipements_Assoc_activites()
+	curseurActivite.dropTableActivite()
+	
+
+def addForeignKeys():
+	'''	
+		Ajoute les clefs etrangeres sur les tables equipement et equipements_Assoc_activites
+	'''
+	curseurEquipement.addForeignKeyInstallation()
+	curseurEquipementActivite.addForeignKeyEquipement()
+	curseurEquipementActivite.addForeignKeyActivite()
+
+
+def dropForeignKeys():
+	curseurEquipement.dropForeignKeyInstallation()
+	curseurEquipementActivite.dropForeignKeyEquipement()
+	curseurEquipementActivite.dropForeignKeyActivite()
+
+
+def application():
+	"""
+		test de la classe Installation
+	"""
+
+	with open('./csv/installations_table.csv','rt') as csvfile:
+		installations_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
+		next(installations_tableReader,None)
+		for row in installations_tableReader:
+			inst.insertInTableInstallation(row[1],row[0],row[7],row[4],row[2],row[10],row[9])
+	csvfile.close()
+
+
+	"""
+		test de la classe Equipement
+	"""
+
+	with open('./csv/equipements.csv','rt') as csvfile:
+		equipement_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
+		next(equipement_tableReader,None)
+		for row in equipement_tableReader:
+			equip.insertInTableEquipement(row[4],row[5],row[2])
+	csvfile.close()
+
+
+	"""
+		test de la classe Equipements_activites
+	"""
+
+	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
+		equipements_activites_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
+		next(equipements_activites_tableReader,None)
+		for row in equipements_activites_tableReader:
+			equip_activ.insertInTableEquipements_Assoc_activites(row[4],row[2])	
+	csvfile.close()
+
+
+
+	"""
+		test de la classe Activite
+	"""
+
+	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
+		activite_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
+		next(activite_tableReader,None)
+		for row in activite_tableReader:
+			activit.insertInTableActivite(row[4],row[5],row[2])
+			#equip_activ.insertInTableEquipements_Assoc_activites(row[4],row[2])	
+	csvfile.close()
+	
+
+
+	myDataBase.commit()
+	myDataBase.deconnexion()
+
+
+
+#createTables()
+#addForeignKeys()
+#application()
+#dropForeignKeys()
+#dropTables()

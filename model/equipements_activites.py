@@ -8,57 +8,88 @@ class Equipements_activites:
 		self.database=database
 
 	def createTableEquipements_Assoc_activites(self):
+		'''
+			Cree la table equipements_Assoc_activites, la table association entre les tables equipement et activite
+				numeroActivite - type integer, l'identifiant et la clef primaire de la table activite
+				numeroEquipement - type integer, l'identifiant de l'equipement utilisé par une activite
+		'''
 		try:
-			self.database.execute("CREATE TABLE equipements_Assoc_activites(codeActivite integer , idEquipement_Activite integer)")
-		except Exception:
-			print ('La table existe déjà')
+			self.database.execute("CREATE TABLE equipements_Assoc_activites(numeroActivite integer , numeroEquipement integer)")
+		except Error.ProgrammingError:
+			print ("TABLE equipements_Assoc_activites : creation impossible car la table existe deja")
 
 
-	def insertInTableEquipements_Assoc_activites(self,codeActivite,idEquipement_Activite):
+	def insertInTableEquipements_Assoc_activites(self, numeroActivite, numeroEquipement):
+		'''
+			Insere une ligne dans la table equipements_Assoc_activites
+				numeroActivite - type integer, l'identifiant et la clef primaire de la table activite
+				numeroEquipement - type integer, l'identifiant de l'equipement utilisé par une activite
+		'''
 		try:
-			self.database.execute("INSERT INTO equipements_Assoc_activites (codeActivite, idEquipement_Activite) VALUES (%s,%s)",(codeActivite,idEquipement_Activite))
+			self.database.execute("INSERT INTO equipements_Assoc_activites (numeroActivite, numeroEquipement) VALUES (%s,%s)",(numeroActivite,numeroEquipement))
+		except Error.IntegrityError:
+			print("TABLE equipements_Assoc_activites : impossible s'inserer la ligne numeroActivite="+numeroActivite+" et numeroEquipement="+numeroEquipement+"car elle est deja presente dans la table")
+
+
+	def deleInTableEquipements_Assoc_activites(self,numeroActivite):
+		try:
+			self.database.execute("DELETE FROM equipements_Assoc_activites WHERE equipements_activites.numeroActivite=(%s)",(numeroActivite,))
 		except Exception:
-			print("Vous ne pouvez pas rentrer deux codeActivite identique")
+			print("Ce numeroActivite n'existe pas")
+
+	
+	# AJOUT DES CLEFS ETRANGERES
+
+	def addForeignKeyEquipement(self):
+		'''
+			Ajoute une clef etrangere 'FK_Equipement' sur la table equipements_activites
+				numeroEquipement de la table equipements_activites fait reference a la clef primaire 'numero' de la table equipement 
+		'''
+		try:
+			self.database.execute("ALTER TABLE equipements_Assoc_activites ADD CONSTRAINT FK_Equipement FOREIGN KEY (numeroEquipement) REFERENCES equipement(numero)")
+		except Error.DatabaseError:
+			print("TABLE equipements_activites : impossible d'ajouter la clef etrangere 'FK_Equipement' car elle existe deja")
+
+
+	def addForeignKeyActivite(self):
+		'''
+			Ajoute une clef etrangere 'FK_Activite' sur la table equipements_activites
+				numeroActivite de la table equipements_activites fait reference a la clef primaire 'numero' de la table activite 
+		'''
+		try:
+			self.database.execute("ALTER TABLE equipements_Assoc_activites ADD CONSTRAINT FK_Activite FOREIGN KEY (numeroActivite) REFERENCES activite(numero)")
+		except Error.DatabaseError:
+			print("TABLE equipements_activites : impossible d'ajouter la clef etrangere 'FK_Activite' car elle existe deja")
+
+
+	# DROP
+			
+	def dropForeignKeyEquipement(self):
+		'''
+			Supprime la clef etrangere 'FK_Equipement'
+		'''
+		try:
+			self.database.execute("ALTER TABLE equipements_Assoc_activites DROP FOREIGN KEY FK_Equipement")
+		except Error.DatabaseError:
+			print("TABLE equipements_Assoc_activites : impossible de supprimer la clef etrangere 'FK_Equipement' car elle n'existe pas")
+
+
+	def dropForeignKeyActivite(self):
+		'''
+			Supprime la clef etrangere 'FK_Activite'
+		'''
+		try:
+			self.database.execute("ALTER TABLE equipements_Assoc_activites DROP FOREIGN KEY FK_Activite")
+		except Error.DatabaseError:
+			print("TABLE equipements_Assoc_activites : impossible de supprimer la clef etrangere 'FK_Activite' car elle n'existe pas")	
 
 
 	def dropTableEquipements_Assoc_activites(self):
+		'''
+			Supprime la table equipements_Assoc_activites
+		'''
 		try:
 			self.database.execute("DROP TABLE IF EXISTS equipements_Assoc_activites")
-		except Exception:
-			print ("Table inexistante")
-
-
-	def deleInTableEquipements_Assoc_activites(self,codeActivite):
-		try:
-			self.database.execute("DELETE FROM equipements_Assoc_activites WHERE equipements_activites.codeActivite=(%s)",(codeActivite,))
-		except Exception:
-			print("Ce codeActivite n'existe pas")
-
-	
-	def addCle_Etrangere_Equipement(self):
-		try:
-			self.database.execute("ALTER TABLE equipements_Assoc_activites ADD CONSTRAINT idEquipement_Activite FOREIGN KEY (idEquipement_Activite) REFERENCES equipement(idEquipement)")
-		except Exception :
-			print("this key is already exist")
-
-
-	def dropCle_Etrangere_Equipement(self):
-		try:
-			self.database.execute("ALTER TABLE equipements_Assoc_activites DROP FOREIGN KEY idEquipement_Activite ")
-		except Error.DatabaseError:
-			print("TABLE activite : clef etrangere inexistante")
-
-
-	def addCle_Etrangere_Activite(self):
-		try:
-			self.database.execute("ALTER TABLE equipements_Assoc_activites ADD CONSTRAINT codeActivite FOREIGN KEY (codeActivite) REFERENCES activite(codeActivite)")
-		except Exception :
-			print("this key is already exist")
-
-
-	def dropCle_Etrangere_Activite(self):
-		try:
-			self.database.execute("ALTER TABLE equipements_Assoc_activites DROP FOREIGN KEY codeActivite ")
-		except Error.DatabaseError:
-			print("TABLE activite : clef etrangere inexistante")	
+		except Error.IntegrityError:
+			print("TABLE equipements_Assoc_activites : ne peut etre supprimee car une ou plusieurs clefs etrangeres sont presentes")		
 	
