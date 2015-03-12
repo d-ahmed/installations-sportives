@@ -50,7 +50,7 @@ def getInstallation():
         for membre in rows:
             sort['installation']=(membre[0])
             sort['adresse']=(membre[1])
-            sort['code_postal']=(membre[2])
+            sort['codePostal']=(membre[2])
             sort['ville']=(ville)
             sort['activite']=(activite)
             #print (sort)

@@ -106,11 +106,6 @@ def insertIntoTables():
 			curseurEquipementActivite.insertInTableEquipements_Assoc_activites(row[4],row[2])	
 	csvfile.close()
 
-
-
-	
-
-
 	dao.commit()
 	dao.deconnexion()
 
