@@ -7,46 +7,74 @@ class Equipement:
 
 
 	def createTableEquipement(self):
+		'''
+			Cree la table equipement
+				numero - type integer, l'identifiant et la clef primaire d'un equipement
+				nom - type text, le nom de l'equipement
+				numeroInstallation - type integer, le numero de l'installation liee a la table
+		'''	
 		try:
-			self.database.execute("CREATE TABLE equipement(idEquipement integer ,nomEquipement text, numeroInstallation_activite integer, PRIMARY KEY (idEquipement))")
-		except Exception:
-			print ("La table existe déjà")
+			self.database.execute("CREATE TABLE equipement(numero integer ,nom text, numeroInstallation integer, PRIMARY KEY (numero))")
+		except Error.ProgrammingError:
+			print ("TABLE equipement : creation impossible car la table existe deja")
 
-	def insertInTableEquipement(self,idEquipement,nomEquipement,numeroInstallation_activite):
+
+	def insertInTableEquipement(self, numero, nom, numeroInstallation):
+		'''
+			Insere un equipement 
+				numero - type integer, l'identifiant et la clef primaire d'un equipement
+				nom - type text, le nom de l'equipement
+				numeroInstallation - type integer, le numero de l'installation liee a la table
+		'''
 		try:
-			self.database.execute("INSERT INTO equipement (idEquipement,nomEquipement,numeroInstallation_activite) VALUES (%s,%s,%s)",(idEquipement,nomEquipement,numeroInstallation_activite))
+			self.database.execute("INSERT INTO equipement (numero,nom,numeroInstallation) VALUES (%s,%s,%s)",(numero,nom,numeroInstallation))
+		except Error.IntegrityError:
+			print("TABLE equipement : impossible d'inserer l'equipement n° "+numero+" car elle est deja presente dans la table")
+
+                                        
+	def deleInTableEquipement(self,numero):
+		try:
+			self.database.execute("DELETE FROM equipement WHERE equipement.numero=(%s)",(numero,))
 		except Exception:
-			print("Vous ne pouvez pas rentrer deux idEquipement identique")
-
-
-                        
-	def dropTableEquipement(self):
-		self.database.execute("DROP TABLE IF EXISTS equipement")
-
-                        
-	def deleInTableEquipement(self,idEquipement):
-                try:
-                        delf.database.execute("DELETE FROM equipement WHERE equipement.idEquipement=(%s)",(idEquipement,))
-                except Exception:
-                        print("Ce idEquipement n'existe pas")
-
+			print("Ce numero n'existe pas")
                         
 
 	def afficheEquipement(self):
-		for row in self.database.execute('SELECT * FROM equipement ORDER BY nomEquipement'):
+		for row in self.database.execute('SELECT * FROM equipement ORDER BY nom'):
 			print (row)
 
-	def addCle_EtrangereInstallation(self):
+
+	# AJOUT DE LA CLEF ETRANGERE
+
+	def addForeignKeyInstallation(self):
+		'''
+			Ajoute une clef etrangere 'FK_Installation' sur la table equipement
+				numeroInstallation de la table equipement fait reference a la clef primaire numero de la table installation 
+		'''
 		try:
-			self.database.execute("ALTER TABLE equipement ADD CONSTRAINT numeroInstallation_activite FOREIGN KEY  (numeroInstallation_activite) REFERENCES installations(numeroInstallation)")
-		except Exception:
-			print("this key is already exist")
+			self.database.execute("ALTER TABLE equipement ADD CONSTRAINT FK_Installation FOREIGN KEY  (numeroInstallation) REFERENCES installation(numero)")
+		except Error.DatabaseError:
+			print("TABLE equipement : impossible d'ajouter la clef etrangere 'FK_Installation' car elle existe deja")
 		
 
-	def dropCle_EtrangereInstallation(self):
-		try:
-			self.database.execute("ALTER TABLE equipement DROP FOREIGN KEY numeroInstallation_activite")
-		except Error.DatabaseError:
-			print("TABLE equipement : clef etrangere inexistante")
+	# DROP
 
+	def dropForeignKeyInstallation(self):
+		'''	
+			Supprime la clef etrangere FK_Installation
+		'''
+		try:
+			self.database.execute("ALTER TABLE equipement DROP FOREIGN KEY FK_Installation")
+		except Error.DatabaseError:
+			print("TABLE equipement : impossible de supprimer la clef etrangere 'FK_Installation' car elle n'existe pas")
+
+
+	def dropTableEquipement(self):
+		'''
+			Supprime la table equipement
+		'''
+		try:
+			self.database.execute("DROP TABLE IF EXISTS equipement")
+		except Error.IntegrityError:
+			print("TABLE equipements : ne peut etre supprimee car une ou plusieurs clefs etrangeres sont presentes")	
 		

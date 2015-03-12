@@ -7,28 +7,33 @@ class Activite:
 
 
 	def createTableActivite(self):
+		'''
+			Cree une table activite
+				numero - type integer, l'identifiant et la clef primaire de la table
+				nom - type text, le nom de l'activite
+				numeroEquipement - type integer, l'identifiant de l'equipement utilise
+		'''
 		try:
-			self.database.execute("CREATE TABLE activite(codeActivite integer ,libeleActivite text, idEquipement_Activite integer, PRIMARY KEY (codeActivite))")
-		except Exception:
-			print ("La table existe déjà")
+			self.database.execute("CREATE TABLE activite(numero integer ,nom text, numeroEquipement integer, PRIMARY KEY (numero))")
+		except Error.ProgrammingError:
+			print ("TABLE activite : creation impossible car la table existe deja")
 
 
-	def insertInTableActivite(self,codeActivite,libeleActivite, idEquipement_Activite):
+	def insertInTableActivite(self, numero, nom, numeroEquipement):
+		'''
+			Insere une activite
+		'''
 		try:
-			self.database.execute("INSERT INTO activite (codeActivite,libeleActivite, idEquipement_Activite) VALUES (%s,%s,%s)",(codeActivite,libeleActivite,idEquipement_Activite))
-		except Exception:
-			print("Vous ne pouvez pas rentrer deux codeActivite identique")
+			self.database.execute("INSERT INTO activite (numero,nom, numeroEquipement) VALUES (%s,%s,%s)",(numero,nom,numeroEquipement))
+		except Error.IntegrityError:
+			print("TABLE activite : impossible d'inserer l'activite n° "+numero+" car elle est deja presente dans la table")
 
                         
-	def dropTableActivite(self):
-		self.database.execute("DROP TABLE IF EXISTS activite")
-
-                        
-	def deleInTableActivite(self,codeActivite):
+	def deleInTableActivite(self,numero):
 		try:
-			delf.database.execute("DELETE FROM activite WHERE activite.codeActivite=(%s)",(codeActivite,))
+			delf.database.execute("DELETE FROM activite WHERE activite.numero=(%s)",(numero,))
 		except Exception:
-			print("Ce codeActivite n'existe pas")
+			print("Ce numero n'existe pas")
 
                        
 	def afficheActivite(self):
@@ -36,15 +41,11 @@ class Activite:
 			print (row)
 
 
-	def addCle_Etrangere(self):
+	def dropTableActivite(self):
+		'''
+			Supprime la table activite
+		'''
 		try:
-			self.database.execute("ALTER TABLE activite ADD CONSTRAINT idEquipement_Activite FOREIGN KEY (idEquipement_Activite) REFERENCES equipement(idEquipement)")
-		except Exception :
-			print("this key is already exist")
-
-
-	def dropCle_Etrangere(self):
-		try:
-			self.database.execute("ALTER TABLE activite DROP FOREIGN KEY idEquipement_Activite ")
-		except Error.DatabaseError:
-			print("TABLE activite : clef etrangere inexistante")	
+			self.database.execute("DROP TABLE IF EXISTS activite")
+		except Error.IntegrityError:
+			print("TABLE activite : ne peut etre supprimee car une ou plusieurs clefs etrangeres sont presentes")			

@@ -1,0 +1,81 @@
+
+import mysql.connector.errors as Error
+
+
+class Equipements_activites:
+
+	def __init__(self,database):
+		self.database=database
+
+	def createTableEquipements_Assoc_activites(self):
+		'''
+			Cree la table equipements_Assoc_activites, la table association entre les tables equipement et activite
+				numeroActivite - type integer, l'identifiant et la clef primaire de la table activite
+				numeroEquipement - type integer, l'identifiant de l'equipement utilisé par une activite
+		'''
+		try:
+			self.database.execute("CREATE TABLE equipements_Assoc_activites(numeroActivite integer , numeroEquipement integer)")
+		except Error.ProgrammingError:
+			print ("TABLE equipements_Assoc_activites : creation impossible car la table existe deja")
+
+
+	def insertInTableEquipements_Assoc_activites(self,numeroActivite,numeroEquipement):
+		try:
+			self.database.execute("INSERT INTO equipements_Assoc_activites (numeroActivite, numeroEquipement) VALUES (%s,%s)",(numeroActivite,numeroEquipement))
+		except Exception:
+			print("Vous ne pouvez pas rentrer deux numeroActivite identique")
+
+
+	def deleInTableEquipements_Assoc_activites(self,numeroActivite):
+		try:
+			self.database.execute("DELETE FROM equipements_Assoc_activites WHERE equipements_activites.numeroActivite=(%s)",(numeroActivite,))
+		except Exception:
+			print("Ce numeroActivite n'existe pas")
+
+	
+	# AJOUT DES CLEFS ETRANGERES
+
+	def addForeignKeyEquipement(self):
+		'''
+			Ajoute une clef etrangere sur la table equipements_activites
+				numeroEquipement de la table equipements_activites fait reference a la clef primaire 'numero' de la table equipement 
+		'''
+		try:
+			self.database.execute("ALTER TABLE equipements_Assoc_activites ADD CONSTRAINT numeroEquipement FOREIGN KEY (numeroEquipement) REFERENCES equipement(numero)")
+		except Error.DatabaseError:
+			print("TABLE equipements_activites : impossible d'ajouter la clef etrangere numeroEquipement car elle existe deja")
+
+
+	def addForeignKeyActivite(self):
+		'''
+			Ajoute une clef etrangere sur la table equipements_activites
+				numeroActivite de la table equipements_activites fait reference a la clef primaire 'numero' de la table activite 
+		'''
+		try:
+			self.database.execute("ALTER TABLE equipements_Assoc_activites ADD CONSTRAINT numeroActivite FOREIGN KEY (numeroActivite) REFERENCES activite(numero)")
+		except Error.DatabaseError:
+			print("TABLE equipements_activites : impossible d'ajouter la clef etrangere numeroActivite car elle existe deja")
+
+
+	# DROP
+			
+	def dropCle_Etrangere_Equipement(self):
+		try:
+			self.database.execute("ALTER TABLE equipements_Assoc_activites DROP FOREIGN KEY numeroEquipement ")
+		except Error.DatabaseError:
+			print("TABLE activite : clef etrangere inexistante")
+
+
+	def dropCle_Etrangere_Activite(self):
+		try:
+			self.database.execute("ALTER TABLE equipements_Assoc_activites DROP FOREIGN KEY numeroActivite ")
+		except Error.DatabaseError:
+			print("TABLE activite : clef etrangere inexistante")	
+
+
+	def dropTableEquipements_Assoc_activites(self):
+		try:
+			self.database.execute("DROP TABLE IF EXISTS equipements_Assoc_activites")
+		except Exception:
+			print ("Table inexistante")		
+	
