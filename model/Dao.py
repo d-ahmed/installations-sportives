@@ -6,9 +6,6 @@ from mysql.connector import Error
 class Dao:
 
 	def __init__(self):
-
-		#self.conn=mysql.connector.connect('host=infoweb','user=E134705T','password=E134705T','db=CreationService',)
-		#self.connexion(host, database, user, password)
 		self = self
 
 
