@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import bottle # Web server
-from bottle import run, route, request
+from bottle import route, static_file, run, request
 import json
 import mysql.connector as mysql
 from mysql.connector import Error
@@ -18,7 +18,7 @@ def recherche():
     # Store HTTP GET arguments
     activite   = request.GET.get('activite',default=None)
     ville = request.GET.get('ville', default=None)
-    resulat=[]
+    resultat=[]
     if ((activite is not None) and (ville is not None)):
         myUtiles=utiles.Utiles()
         myDataBase=Dao.Dao()
@@ -27,46 +27,31 @@ def recherche():
         villeBis=myUtiles.cleanString(ville)
         activiteBis=myUtiles.cleanString(activite)
         #print("activiteBis = "+activiteBis)
-        cur.execute("Select i.nomInstallation, i.numeroInstallation, i.ville, i.adresse, a.libeleActivite from installations i JOIN equipement e on i.numeroInstallation=e.numeroInstallation_activite JOIN equipements_Assoc_activites ea on e.idEquipement=ea.idEquipement_Activite JOIN activite a on a.codeActivite=ea.codeActivite where i.ville= %s and a.libeleActivite like %s",(ville,"%"+activite+"%"))
+        cur.execute("Select i.nom, i.numero, i.ville, i.adresse, a.nom from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where ville like %s and a.nom like %s",(ville,"%"+activite+"%"))
         rows = cur.fetchall()
         for membre in rows:
-<<<<<<< HEAD
             sort={}
             sort['installation']=str((membre[0]),"UTF-8")
             sort['numeroInstallation']=(membre[1])
             sort['ville']=str((membre[2]),"UTF-8")
             sort['adresse']=str((membre[3]),"UTF-8")
             sort['activite']=str((membre[4]),"UTF-8")
-            print (json.dumps(sort))
-            resulat.append(sort)
+            #print (json.dumps(sort))
+            resultat.append(sort)
     #print ({'installation':resulat})
-    return 	({'installations':resulat})
+    print (json.dumps({'installation':resultat}))
+    return (json.dumps({'installation':resultat}))
+    #return 	(json.dumps(resultat))
 
 @route('/<filepath:path>')
-    def server_static(filepath):
+def server_static(filepath):
     return static_file(filepath, root='./static')
-=======
-            sort['installation']=(membre[0])
-            sort['adresse']=(membre[1])
-            sort['codePostal']=(membre[2])
-            sort['ville']=(ville)
-            sort['activite']=(activite)
-            #print (sort)
-            sortStr=sortStr+bottle.template('affiche', installation=(membre[0]),ville=ville,activite=activite,adresse=(membre[1]),code_postal=(membre[2]))
-        sortStr=sortStr+bottle.template('fin')
-        if rows:
-        #return json.dumps(sort,indent=0)
-        #json.dumps(sort,indent=0)
-            return """<html>"""+sortStr+""" </html>"""
-        else:
-            return """
-    					<p>Non trouvé</p>
-    				"""
 
+run(host='localhost', port=8080)
 
->>>>>>> 032ec7846aa2ab52292855833ebbb9862a35eca4
-
+"""
 if __name__ == '__main__':        
     # To run the server, type-in $ python server.py
     bottle.debug(True) # display traceback 
     run(host='localhost', port=8080, reloader=True) 
+"""
