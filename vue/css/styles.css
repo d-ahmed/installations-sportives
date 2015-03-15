@@ -1,3 +1,15 @@
 #error{
 	background-color: #d9534f;
 }
+
+.reponce{
+	margin: 20px;
+}
+
+.reponce:hover{
+	cursor: pointer;
+}
+
+.row{
+	margin: 20px;
+}
