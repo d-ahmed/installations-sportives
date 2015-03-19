@@ -3,7 +3,6 @@ import sys
 sys.path.append("../model")
 import Dao
 import json
-
 @route('/installation')
 def recherche():
     # Récuperation des argument passé en paramètre dans l'url
@@ -36,7 +35,7 @@ def recherche():
     return {'installations':resultat}
 
 
-import main
+
 @route('/ville')
 def recherche():
     resultat=[]
@@ -49,4 +48,5 @@ def recherche():
         sort={}
         sort['ville']=str((membre[0]),"UTF-8")
         resultat.append(sort)
+    print(resultat)
     return json.dumps(resultat)
