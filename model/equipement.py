@@ -14,7 +14,7 @@ class Equipement:
 				numeroInstallation - type integer, le numero de l'installation liee a la table
 		'''	
 		try:
-			self.database.execute("CREATE TABLE equipement(numero integer ,nom text, numeroInstallation integer, PRIMARY KEY (numero))")
+			self.database.execute("CREATE TABLE equipement(numero integer NOT NULL,nom text, numeroInstallation integer, PRIMARY KEY (numero))")
 		except Error.ProgrammingError:
 			print ("TABLE equipement : creation impossible car la table existe deja")
 

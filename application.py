@@ -70,6 +70,15 @@ def insertIntoTables():
 		Insere les donnees dans les tables installation, equipement, equipements_Assoc_activites et activite
 	"""
 
+	# Table activite
+	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
+		activite_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
+		next(activite_tableReader,None)
+		for row in activite_tableReader:
+			curseurActivite.insertInTableActivite(row[4],row[5],row[2])
+			#equip_activ.insertInTableEquipements_Assoc_activites(row[4],row[2])	
+	csvfile.close()
+
 	# Table installation
 	with open('./csv/installations_table.csv','rt') as csvfile:
 		installations_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -85,16 +94,6 @@ def insertIntoTables():
 		next(equipement_tableReader,None)
 		for row in equipement_tableReader:
 			curseurEquipement.insertInTableEquipement(row[4],row[5],row[2])
-	csvfile.close()
-
-
-	# Table activite
-	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
-		activite_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
-		next(activite_tableReader,None)
-		for row in activite_tableReader:
-			curseurActivite.insertInTableActivite(row[4],row[5],row[2])
-			#equip_activ.insertInTableEquipements_Assoc_activites(row[4],row[2])	
 	csvfile.close()
 
 

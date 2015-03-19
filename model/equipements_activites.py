@@ -14,7 +14,7 @@ class Equipements_activites:
 				numeroEquipement - type integer, l'identifiant de l'equipement utilisé par une activite
 		'''
 		try:
-			self.database.execute("CREATE TABLE equipements_Assoc_activites(numeroActivite integer , numeroEquipement integer)")
+			self.database.execute("CREATE TABLE equipements_Assoc_activites(numeroActivite integer NOT NULL, numeroEquipement integer NOT NULL)")
 		except Error.ProgrammingError:
 			print ("TABLE equipements_Assoc_activites : creation impossible car la table existe deja")
 

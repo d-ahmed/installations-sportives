@@ -20,7 +20,7 @@ class Installation :
 				longitude - type float, la longitude de la position de l'installation
 		'''
 		try:
-			self.database.execute("CREATE TABLE installation(numero integer ,nom text, adresse text, codePostal integer, ville text, latitude float ,longitude float, PRIMARY KEY (numero))")
+			self.database.execute("CREATE TABLE installation(numero integer NOT NULL,nom text, adresse text, codePostal integer, ville text, latitude float ,longitude float, PRIMARY KEY (numero))")
 		except Error.ProgrammingError:
 			print ("TABLE installation : creation impossible car la table existe deja")
 
