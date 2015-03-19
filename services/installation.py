@@ -3,6 +3,9 @@ import sys
 sys.path.append("../model")
 import Dao
 import json
+
+
+
 @route('/installation')
 def recherche():
     # Récuperation des argument passé en paramètre dans l'url
@@ -24,11 +27,11 @@ def recherche():
         rows = cur.fetchall()
         for membre in rows:
             sort={}
-            sort['installation']=(membre[0]).decode()
+            sort['installation']=(membre[0])
             sort['numeroInstallation']=(membre[1])
-            sort['ville']=(membre[2]).decode()
-            sort['adresse']=(membre[3]).decode()
-            sort['activite']=(membre[4]).decode()
+            sort['ville']=(membre[2])
+            sort['adresse']=(membre[3])
+            sort['activite']=(membre[4])
             sort['code_postal']=(membre[5])
             sort['numeroEquipement']=(membre[6])
             resultat.append(sort)
@@ -46,7 +49,7 @@ def recherche():
     rows = cur.fetchall()
     for membre in rows:
         sort={}
-        sort['ville']=(membre[0]).decode()
+        sort['ville']=(membre[0])
         resultat.append(sort)
     print(resultat)
     return json.dumps(resultat)
