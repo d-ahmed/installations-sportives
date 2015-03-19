@@ -1,20 +1,50 @@
 $(document).ready(function(){
+	var villes = [];
+	var activites = [];
 
-	//$('#installations').click(function(){
-		/*$('#recherche').remove();
-		$('<form/>',{methode:'get',id:'recherche'}).appendTo($("#container"));
+	$.ajax({
+		url:"/ville",
+		dataType: 'JSON',
+    	type: 'GET',
 
-		$('<div/>',{class:'row', id:'row'}).appendTo("#recherche");
-		$('<div/>',{class:'col-xs-6 col-md-4', id:'col1'}).appendTo("#row");
-		$('<div/>',{class:'col-xs-6 col-md-4', id:'col2'}).appendTo("#row");
-		$('<div/>',{class:'col-xs-6 col-md-4', id:'col3'}).appendTo("#row");
-		
-		$('<p/>',{text:'Ville ', id:'p1'}).appendTo($("#col1"));
-		$("<input/>",{type:'text', id:'ville'}).appendTo($('#p1'));
-		$('<p/>',{text:'Activite ',id:'p2'}).appendTo($("#col2"));
-		$("<input/>",{type:'text', id:'activite'}).appendTo($('#p2'));
-		$("<input/>",{type:'submit', value:'recherche'}).appendTo($('#col3'));
-		*/
+		success: function (responce) {
+			//console.log("responce ville"+responce);
+			$.each(responce,function(i){
+				villes[i]=responce[i].ville;
+				//console.log(responce[i]);
+			});
+			$('#ville').autocomplete({
+				minLength:3,
+        		source:cleanArray(villes)
+    		});
+		},
+
+		error: function (data, xhr, status, err) {
+			//console.log("err "+err);
+		}, 
+	});
+
+	$.ajax({
+		url:"/activite",
+		dataType: 'JSON',
+    	type: 'GET',
+
+		success: function (responce) {
+			//console.log("responce activite"+responce);
+			$.each(responce,function(i){
+				activites[i]=responce[i].activite;
+				//console.log(responce[i]);
+			});
+			$('#activite').autocomplete({
+				minLength:3,
+        		source:cleanArray(activites)
+    		});
+		},
+
+		error: function (data, xhr, status, err) {
+			//console.log("err "+err);
+		}, 
+	});
 		
 		$('#recherche').submit(function(e){
 			e.preventDefault();
@@ -23,33 +53,39 @@ $(document).ready(function(){
 			}	
 			var requette="";
 			if($('#ville').val() && $('#activite').val()){
-				//alert($('#ville').html());
 				requette='?ville='+$('#ville').val()+"&activite="+$('#activite').val();
 			}
 			$('#ville').val("");
 			$('#activite').val("");
-			//$('#recherche').css({display:'none'});
-			if($(".reponce")){
-				$(".reponce").remove();
-			}
 			$.ajax({
-				url:"http://localhost:8001/installation"+requette,
+				url:"/installation"+requette,
 				dataType: 'JSON',
-    			//jsonpCallback: 'callback',
-    			//type: 'GET',
+    			type: 'GET',
 				success: function (responce) {
+					//console.log(responce);
+					$(".reponce").remove();
 					$('#error').hide();
 					$.each(responce, function(index,responce) {
-						$.each(responce,function(i){
-						//console.log(responce[i].installation);
-						$('<div/>',{id:""+(i),class:"reponce"}).appendTo($('#container'));
-						$('<div/>',{class:"panel panel-primary"}).appendTo($("#"+(i)));
-						$('<div/>',{class:"panel-heading"}).text(responce[i].installation+" "+responce[i].code_postal+" "+responce[i].ville).appendTo($("#"+(i)).find('.panel-primary'));
-						$('<div/>',{class:"panel-body"}).appendTo($("#"+(i)).find('.panel-primary'));
-						$('<p/>').text("Activite : "+responce[i].activite).appendTo($("#"+(i)).find('.panel-body'));
-						$('<p/>').text("Adresse : "+responce[i].adresse+" "+responce[i].code_postal+" "+responce[i].ville).appendTo($("#"+(i)).find('.panel-body'));
-						})
+						if(responce[0]){
+							$.each(responce,function(i){
+								//console.log(responce[i].installation);
+								$('<div/>',{id:""+(responce[i].numeroEquipement),class:"reponce "}).appendTo($('#container'));
+								$('<div/>',{class:"panel panel-primary"}).appendTo($("#"+(responce[i].numeroEquipement)));
+								$('<div/>',{class:"panel-heading"}).text(responce[i].installation+" "+responce[i].code_postal+" "+responce[i].ville).appendTo($("#"+(responce[i].numeroEquipement)).find('.panel-primary'));
+								$('<div/>',{class:"panel-body"}).appendTo($("#"+(responce[i].numeroEquipement)).find('.panel-primary'));
+								$('<p/>').text("Activite : "+responce[i].activite).appendTo($("#"+(responce[i].numeroEquipement)).find('.panel-body'));
+								$('<p/>').text("Adresse : "+responce[i].adresse+" "+responce[i].code_postal+" "+responce[i].ville).appendTo($("#"+(responce[i].numeroEquipement)).find('.panel-body'));
+							})
+						}else{
+							$('<div/>',{id:'error', class:'col-md-12'}).appendTo('#container');
+							$('<p/>').text("Cette activite n'est pas pratiqué dans cette ville.").appendTo($('#error'));
+						}
+					});
+
+					$('.reponce').click(function(){
+						getEquipement($(this),$(this).attr('id'));
 					})
+
 				},
 
 				error: function (data, xhr, status, err) {
@@ -70,4 +106,35 @@ $(document).ready(function(){
 
 function base(arg){
 	console.log(arg);
+}
+
+
+function getEquipement(equipement, id){
+	$.ajax({
+		url:"/equipement?id="+id,
+		dataType: 'JSON',
+    	//jsonpCallback: 'callback',
+    	type: 'GET',
+
+		success: function (responce) {
+			$('#equipement').remove();
+			equipement.find('.panel-body').append($('<p/>',{id:'equipement'}).text("Equipement : "+responce));
+		},
+
+		error: function (data, xhr, status, err) {
+			
+		}, 
+	});
+}
+
+//cleanArray removes all duplicated elements
+function cleanArray(array) {
+  var i, j, len = array.length, out = [], obj = {};
+  for (i = 0; i < len; i++) {
+    obj[array[i]] = 0;
+  }
+  for (j in obj) {
+    out.push(j);
+  }
+  return out;
 }

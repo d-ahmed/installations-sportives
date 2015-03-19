@@ -1,11 +1,6 @@
 import bottle # Web server
-from sklearn.preprocessing import normalize
-from bottle import route, static_file, run, request, response
-import json
-import mysql.connector as mysql
-from mysql.connector import Error
+from bottle import route, run, request, response
 import sys
-from collections import deque
 sys.path.append("/home/daniel/Documents/Creation_D_application/with_mysql/model")
 
 import Dao
