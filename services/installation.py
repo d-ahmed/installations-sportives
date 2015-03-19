@@ -40,14 +40,13 @@ import main
 @route('/ville')
 def recherche():
     resultat=[]
-    # myDataBase=Dao.Dao()
-    # myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
-    # cur = myDataBase.getCursor()
-    main.cur.execute("Select ville from installation")
-    rows = main.cur.fetchall()
+    myDataBase=Dao.Dao()
+    myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
+    cur = myDataBase.getCursor()
+    cur.execute("Select ville from installation")
+    rows = cur.fetchall()
     for membre in rows:
         sort={}
         sort['ville']=str((membre[0]),"UTF-8")
         resultat.append(sort)
-    print(resultat)
     return json.dumps(resultat)

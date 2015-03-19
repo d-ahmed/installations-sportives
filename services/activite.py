@@ -3,7 +3,6 @@ import sys
 sys.path.append("../model")
 import Dao
 import json
-import main
 
 @route('/activite')
 def recherche():
@@ -12,11 +11,10 @@ def recherche():
     myDataBase=Dao.Dao()
     myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
     cur = myDataBase.getCursor()
-    main.cur.execute("Select nom from activite")
-    rows = main.cur.fetchall()
+    cur.execute("Select nom from activite")
+    rows = cur.fetchall()
     for membre in rows:
         sort={}
         sort['activite']=str((membre[0]),"UTF-8")
         resultat.append(sort)
-    #print (resultat)
     return json.dumps(resultat)

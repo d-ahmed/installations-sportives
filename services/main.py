@@ -1,5 +1,4 @@
 from bottle import route, static_file, run
-import sys
 import installation
 import equipement
 import activite
