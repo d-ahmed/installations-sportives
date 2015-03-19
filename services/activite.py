@@ -9,12 +9,13 @@ def recherche():
     # Store HTTP GET arguments
     resultat=[]
     myDataBase=Dao.Dao()
-    myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
+    # myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
+    myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
     cur = myDataBase.getCursor()
     cur.execute("Select nom from activite")
     rows = cur.fetchall()
     for membre in rows:
         sort={}
-        sort['activite']=(membre[0]).decode()
+        sort['activite']=(membre[0])
         resultat.append(sort)
     return json.dumps(resultat)

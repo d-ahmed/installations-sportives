@@ -100,8 +100,8 @@ def insertIntoTables():
 
 
 
-createTables()
-addForeignKeys()
-insertIntoTables()
-#dropForeignKeys()
-#dropTables()
+#createTables()
+#addForeignKeys()
+#insertIntoTables()
+dropForeignKeys()
+dropTables()
