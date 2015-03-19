@@ -11,7 +11,6 @@ class Dao:
 
 	def connexion(self, host, database, user, password):
 		try:
-
 			self.conn=mysql.connect(host=host, database=database, user=user,password=password)
 			self.cur=self.conn.cursor()
 		except Error as e:

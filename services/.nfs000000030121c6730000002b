@@ -14,8 +14,7 @@ def recherche():
 
         myDataBase=Dao.Dao()
         # Connexion a la base de donnés
-        # myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
-        myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
+        myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
         # Recuperation du cursseur
         cur = myDataBase.getCursor()
         # Exécution de la requette qui vas récuperer le nom, le numero, la ville, le code postale l'adresse
@@ -41,17 +40,13 @@ def recherche():
 def recherche():
     resultat=[]
     myDataBase=Dao.Dao()
-    # myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
-    myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
+    myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
     cur = myDataBase.getCursor()
-    
     cur.execute("Select ville from installation")
     rows = cur.fetchall()
     for membre in rows:
         sort={}
         sort['ville']=str((membre[0]),"UTF-8")
         resultat.append(sort)
-        print(resultat)
-   
-    
+    print(resultat)
     return json.dumps(resultat)

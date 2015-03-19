@@ -51,7 +51,7 @@ def recherche():
         sort={}
         sort['ville']=str((membre[0]),"UTF-8")
         resultat.append(sort)
-        print(resultat)
+    print(resultat)
    
-    
+    print('erreur de bd')
     return json.dumps(resultat)

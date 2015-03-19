@@ -44,14 +44,11 @@ def recherche():
     # myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
     myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
     cur = myDataBase.getCursor()
-    
     cur.execute("Select ville from installation")
     rows = cur.fetchall()
     for membre in rows:
         sort={}
         sort['ville']=str((membre[0]),"UTF-8")
         resultat.append(sort)
-        print(resultat)
-   
-    
+    print(resultat)
     return json.dumps(resultat)
