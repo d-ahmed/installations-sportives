@@ -24,11 +24,11 @@ def recherche():
         rows = cur.fetchall()
         for membre in rows:
             sort={}
-            sort['installation']=str((membre[0]),"UTF-8")
+            sort['installation']=(membre[0]).decode()
             sort['numeroInstallation']=(membre[1])
-            sort['ville']=str((membre[2]),"UTF-8")
-            sort['adresse']=str((membre[3]),"UTF-8")
-            sort['activite']=str((membre[4]),"UTF-8")
+            sort['ville']=(membre[2]).decode()
+            sort['adresse']=(membre[3]).decode()
+            sort['activite']=(membre[4]).decode()
             sort['code_postal']=(membre[5])
             sort['numeroEquipement']=(membre[6])
             resultat.append(sort)
@@ -46,7 +46,7 @@ def recherche():
     rows = cur.fetchall()
     for membre in rows:
         sort={}
-        sort['ville']=str((membre[0]),"UTF-8")
+        sort['ville']=(membre[0]).decode()
         resultat.append(sort)
     print(resultat)
     return json.dumps(resultat)

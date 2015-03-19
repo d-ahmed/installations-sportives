@@ -15,6 +15,6 @@ def recherche():
     rows = cur.fetchall()
     for membre in rows:
         sort={}
-        sort['activite']=str((membre[0]),"UTF-8")
+        sort['activite']=(membre[0]).decode()
         resultat.append(sort)
     return json.dumps(resultat)
