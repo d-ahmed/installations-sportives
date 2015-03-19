@@ -1,6 +1,6 @@
 from bottle import route, run, request, response
 import sys
-sys.path.append("/home/daniel/Documents/Creation_D_application/with_mysql/model")
+sys.path.append("../model")
 import Dao
 import json
 
