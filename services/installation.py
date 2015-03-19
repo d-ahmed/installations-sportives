@@ -3,6 +3,7 @@ import sys
 sys.path.append("../model")
 import Dao
 import json
+
 @route('/installation')
 def recherche():
     # Récuperation des argument passé en paramètre dans l'url
@@ -35,15 +36,15 @@ def recherche():
     return {'installations':resultat}
 
 
-
+import main
 @route('/ville')
 def recherche():
     resultat=[]
-    myDataBase=Dao.Dao()
-    myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
-    cur = myDataBase.getCursor()
-    cur.execute("Select ville from installation")
-    rows = cur.fetchall()
+    # myDataBase=Dao.Dao()
+    # myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
+    # cur = myDataBase.getCursor()
+    main.cur.execute("Select ville from installation")
+    rows = main.cur.fetchall()
     for membre in rows:
         sort={}
         sort['ville']=str((membre[0]),"UTF-8")
