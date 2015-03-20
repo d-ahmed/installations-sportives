@@ -1,7 +1,5 @@
-import sys
-sys.path.append("model")
-from dao import Dao
 import csv
+
 
 
 # connexion a la base de donnee en fonction de l'utilisateur
@@ -10,11 +8,17 @@ prenom = input()
 print ("Entrer votre mots de passe")
 password = input()
 
-dao=Dao()
+dao=Dao.Dao()
 if(prenom=="aurelie"):
 	dao.connexion('infoweb', 'E134705T', 'E134705T', password)
 else:
 	dao.connexion('localhost', 'CreationService', 'root', password)
+
+# On récupère les curseurs pour l'initialisation des classes
+curseurInstallation = installation.Installation(dao.getCursor())
+curseurEquipement = equipement.Equipement(dao.getCursor())
+curseurEquipementActivite = equipements_activites.Equipements_activites(dao.getCursor())
+curseurActivite = activite.Activite(dao.getCursor())
 
 
 def createTables():
@@ -22,10 +26,10 @@ def createTables():
 		Cree les tables installation, equipement et equipements_activites
 	'''
 	# Création des tables
-	dao.createTableInstallation()
-	dao.createTableEquipement()
-	dao.createTableEquipements_Assoc_activites()
-	dao.createTableActivite()
+	curseurInstallation.createTableInstallation()
+	curseurEquipement.createTableEquipement()
+	curseurEquipementActivite.createTableEquipements_Assoc_activites()
+	curseurActivite.createTableActivite()
 
 
 def dropTables():
@@ -33,84 +37,68 @@ def dropTables():
 		Supprime les tables installation, equipement et equipements_activites
 	'''
 
-	dao.dropTableInstallation()
-	dao.dropTableEquipement()
-	dao.dropTableEquipements_Assoc_activites()
-	dao.dropTableActivite()
+	curseurInstallation.dropTableInstallation()
+	curseurEquipement.dropTableEquipement()
+	curseurEquipementActivite.dropTableEquipements_Assoc_activites()
+	curseurActivite.dropTableActivite()
 	
 
 def addForeignKeys():
 	'''	
 		Ajoute les clefs etrangeres sur les tables equipement et equipements_Assoc_activites
 	'''
-	dao.addForeignKeyInstallation()
-	dao.addForeignKeyEquipement()
-	dao.addForeignKeyActivite()
+	curseurEquipement.addForeignKeyInstallation()
+	curseurEquipementActivite.addForeignKeyEquipement()
+	curseurEquipementActivite.addForeignKeyActivite()
 
 
 def dropForeignKeys():
 	'''
 		Supprime les clefs etrangeres des tables equipement et equipements_Assoc_activites
 	'''
-	dao.dropForeignKeyInstallation()
-	dao.dropForeignKeyEquipement()
-	dao.dropForeignKeyActivite()
+	curseurEquipement.dropForeignKeyInstallation()
+	curseurEquipementActivite.dropForeignKeyEquipement()
+	curseurEquipementActivite.dropForeignKeyActivite()
 
 
+def insertIntoTables():
+	"""
+		Insere les donnees dans les tables installation, equipement, equipements_Assoc_activites et activite
+	"""
 
-
-"""
-	Insere les donnees dans les tables installation, equipement, equipements_Assoc_activites et activite
-"""
-
-
-def insertIntoTableActivite():
 	# Table activite
 	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
 		activite_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
 		next(activite_tableReader,None)
 		for row in activite_tableReader:
-			dao.insertInTableActivite(row[4],row[5],row[2])
+			curseurActivite.insertInTableActivite(row[4],row[5],row[2])
 			#equip_activ.insertInTableEquipements_Assoc_activites(row[4],row[2])	
 	csvfile.close()
 
-	dao.commit()
-	dao.deconnexion()
-
-
-def insertIntoTableInstallation():
 	# Table installation
 	with open('./csv/installations_table.csv','rt') as csvfile:
 		installations_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
 		next(installations_tableReader,None)
 		for row in installations_tableReader:
-			dao.insertInTableInstallation(row[1],row[0],row[7],row[4],row[2],row[10],row[9])
+			curseurInstallation.insertInTableInstallation(row[1],row[0],row[7],row[4],row[2],row[10],row[9])
 	csvfile.close()
 
-	dao.commit()
-	dao.deconnexion()
-
-
-def insertIntoTablesEquipement():
+	
 	# Table equipement
 	with open('./csv/equipements.csv','rt') as csvfile:
 		equipement_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
 		next(equipement_tableReader,None)
 		for row in equipement_tableReader:
-			dao.insertInTableEquipement(row[4],row[5],row[2])
+			curseurEquipement.insertInTableEquipement(row[4],row[5],row[2])
 	csvfile.close()
 
-	dao.commit()
-	dao.deconnexion()
 
-
-def insertIntoTableEquipements_Assoc_activites():
 	# Table equipements_Assoc_activites
 	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
 		equipements_activites_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
 		next(equipements_activites_tableReader,None)
 		for row in equipements_activites_tableReader:
-			dao.insertInTableEquipements_Assoc_activites(row[4],row[2])	
+			curseurEquipementActivite.insertInTableEquipements_Assoc_activites(row[4],row[2])	
 	csvfile.close()
 
 	dao.commit()
@@ -118,11 +106,7 @@ def insertIntoTableEquipements_Assoc_activites():
 
 
 
-
-insertIntoTableActivite()
-insertIntoTableInstallation()
-insertIntoTablesEquipement()
-insertIntoTableEquipements_Assoc_activites()
+createTables()
 addForeignKeys()
 insertIntoTables()
 #dropForeignKeys()

@@ -1,6 +1,4 @@
-import sys
-sys.path.append("model")
-from dao import Dao
+from model import Dao 
 import csv
 
 
@@ -10,7 +8,7 @@ prenom = input()
 print ("Entrer votre mots de passe")
 password = input()
 
-dao=Dao()
+dao=Dao.Dao()
 if(prenom=="aurelie"):
 	dao.connexion('infoweb', 'E134705T', 'E134705T', password)
 else:
@@ -57,14 +55,11 @@ def dropForeignKeys():
 	dao.dropForeignKeyActivite()
 
 
+def insertIntoTables():
+	"""
+		Insere les donnees dans les tables installation, equipement, equipements_Assoc_activites et activite
+	"""
 
-
-"""
-	Insere les donnees dans les tables installation, equipement, equipements_Assoc_activites et activite
-"""
-
-
-def insertIntoTableActivite():
 	# Table activite
 	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
 		activite_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -74,11 +69,6 @@ def insertIntoTableActivite():
 			#equip_activ.insertInTableEquipements_Assoc_activites(row[4],row[2])	
 	csvfile.close()
 
-	dao.commit()
-	dao.deconnexion()
-
-
-def insertIntoTableInstallation():
 	# Table installation
 	with open('./csv/installations_table.csv','rt') as csvfile:
 		installations_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -87,11 +77,7 @@ def insertIntoTableInstallation():
 			dao.insertInTableInstallation(row[1],row[0],row[7],row[4],row[2],row[10],row[9])
 	csvfile.close()
 
-	dao.commit()
-	dao.deconnexion()
-
-
-def insertIntoTablesEquipement():
+	
 	# Table equipement
 	with open('./csv/equipements.csv','rt') as csvfile:
 		equipement_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -100,11 +86,7 @@ def insertIntoTablesEquipement():
 			dao.insertInTableEquipement(row[4],row[5],row[2])
 	csvfile.close()
 
-	dao.commit()
-	dao.deconnexion()
 
-
-def insertIntoTableEquipements_Assoc_activites():
 	# Table equipements_Assoc_activites
 	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
 		equipements_activites_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -118,12 +100,8 @@ def insertIntoTableEquipements_Assoc_activites():
 
 
 
-
-insertIntoTableActivite()
-insertIntoTableInstallation()
-insertIntoTablesEquipement()
-insertIntoTableEquipements_Assoc_activites()
-addForeignKeys()
-insertIntoTables()
-#dropForeignKeys()
-#dropTables()
+#createTables()
+#addForeignKeys()
+#insertIntoTables()
+dropForeignKeys()
+dropTables()
