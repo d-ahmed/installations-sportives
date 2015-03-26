@@ -8,11 +8,12 @@ class Dao:
 		self = self
 
 	def connexion(self, host, database, user, password):
+		
 		try:
 			self.conn=mysql.connect(host=host, database=database, user=user,password=password)
 			self.cur=self.conn.cursor()
-		except Error as e:
-			print(e)
+		except Error.ProgrammingError:
+			print("CONNEXION : mauvais mot de passe")
  
 
 	def deconnexion(self):
@@ -70,7 +71,8 @@ class Dao:
 			self.cur.execute("DROP TABLE IF EXISTS activite")
 		except Error.IntegrityError:
 			print("TABLE activite : ne peut etre supprimee car une ou plusieurs clefs etrangeres sont presentes")
-
+		except AttributeError:
+			print("TABLE activite : ne peut etre supprimee car vous n'êtes pas connecté")	
 
 	def createTableEquipement(self):
 		'''
@@ -133,7 +135,8 @@ class Dao:
 			self.cur.execute("ALTER TABLE equipement DROP FOREIGN KEY FK_Installation")
 		except Error.DatabaseError:
 			print("TABLE equipement : impossible de supprimer la clef etrangere 'FK_Installation' car elle n'existe pas")
-
+		except AttributeError:
+			print("TABLE installation : impossible de supprimer la clef etrangere 'FK_Installation' car vous n'êtes pas connecté")	
 
 	def dropTableEquipement(self):
 		'''
@@ -143,7 +146,8 @@ class Dao:
 			self.cur.execute("DROP TABLE IF EXISTS equipement")
 		except Error.IntegrityError:
 			print("TABLE equipements : ne peut etre supprimee car une ou plusieurs clefs etrangeres sont presentes")
-
+		except AttributeError:
+			print("TABLE equipements : ne peut etre supprimee car vous n'êtes pas connecté")	
 
 	def createTableEquipements_Assoc_activites(self):
 		'''
@@ -210,6 +214,8 @@ class Dao:
 			self.cur.execute("ALTER TABLE equipements_Assoc_activites DROP FOREIGN KEY FK_Equipement")
 		except Error.DatabaseError:
 			print("TABLE equipements_Assoc_activites : impossible de supprimer la clef etrangere 'FK_Equipement' car elle n'existe pas")
+		except AttributeError:
+			print("TABLE equipement : impossible de supprimer la clef etrangere 'FK_Equipement' car vous n'êtes pas connecté")	
 
 
 	def dropForeignKeyActivite(self):
@@ -220,6 +226,8 @@ class Dao:
 			self.cur.execute("ALTER TABLE equipements_Assoc_activites DROP FOREIGN KEY FK_Activite")
 		except Error.DatabaseError:
 			print("TABLE equipements_Assoc_activites : impossible de supprimer la clef etrangere 'FK_Activite' car elle n'existe pas")	
+		except AttributeError:
+			print("TABLE equipements_Assoc_activites : impossible de supprimer la clef etrangere 'FK_Activite' car vous n'êtes pas connecté")	
 
 
 	def dropTableEquipements_Assoc_activites(self):
@@ -230,13 +238,16 @@ class Dao:
 			self.cur.execute("DROP TABLE IF EXISTS equipements_Assoc_activites")
 		except Error.IntegrityError:
 			print("TABLE equipements_Assoc_activites : ne peut etre supprimee car une ou plusieurs clefs etrangeres sont presentes")		
-	
+		except AttributeError:
+			print("TABLE equipements_Assoc_activites : impossible de supprimer la clef etrangere 'FK_Equipement' car vous n'êtes pas connecté")
+
 
 	def createTableInstallation(self):
 		'''
 			Cree la table installation
 				numero - type integer, l'identifiant et la clef primaire de la table
 				nom - type text, le nom de l'installation
+				voie - type integer, le numero de la voie
 				adresse - type text, l'adresse de l'installation
 				codePostal - type integer, le code postal de l'installation
 				ville - type text, la ville de l'installation
@@ -244,16 +255,17 @@ class Dao:
 				longitude - type float, la longitude de la position de l'installation
 		'''
 		try:
-			self.cur.execute("CREATE TABLE installation(numero integer NOT NULL,nom text, adresse text, codePostal integer, ville text, latitude float ,longitude float, PRIMARY KEY (numero))")
+			self.cur.execute("CREATE TABLE installation(numero integer NOT NULL,nom text, voie integer, adresse text, codePostal integer, ville text, latitude float ,longitude float, PRIMARY KEY (numero))")
 		except Error.ProgrammingError:
 			print ("TABLE installation : creation impossible car la table existe deja")
 
 
-	def insertInTableInstallation(self, numero, nom, adresse, codePostal, ville, latitude, longitude):
+	def insertInTableInstallation(self, numero, nom, voie, adresse, codePostal, ville, latitude, longitude):
 		'''
 			Insere une installation
 				numero - type integer, l'identifiant et la clef primaire de la table
 				nom - type text, le nom de l'installation
+				voie - type integer, le numero de la voie
 				adresse - type text, l'adresse de l'installation
 				codePostal - type integer, le code postal de l'installation
 				ville - type text, la ville de l'installation
@@ -261,7 +273,7 @@ class Dao:
 				longitude - type float, la longitude de la position de l'installation
 		'''
 		try:
-			self.cur.execute("INSERT INTO installation (numero, nom, adresse, codePostal, ville, latitude, longitude) VALUES (%s,%s,%s,%s,%s,%s,%s)",(numero,nom,adresse,codePostal,ville,latitude,longitude))
+			self.cur.execute("INSERT INTO installation (numero, nom, voie, adresse, codePostal, ville, latitude, longitude) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(numero,nom,voie,adresse,codePostal,ville,latitude,longitude))
 		except Error.IntegrityError:
 			print("TABLE installation : impossible d'inserer l'installation n° "+numero+" car elle est deja presente dans la table")
 
@@ -278,9 +290,9 @@ class Dao:
 			print (row)
 
 
-	def modiffierTableInstallation(self,numero,nom,adresse,code_postal,ville,latitude,longitude):
+	def modiffierTableInstallation(self, numero, nom, voie, adresse, codePostal, ville, latitude, longitude):
 		try:
-			self.cur.execute("UPDATE installations SET numero=%s , nom=%s, adresse=%s ,code_postal=%s ,ville=%s ,latitude=%s ,longitude=%s  WHERE numero = installations.numero",(numero,nom,adresse,code_postal,ville,latitude,longitude))
+			self.cur.execute("UPDATE installations SET numero=%s , nom=%s, adresse=%s ,codePostal=%s ,ville=%s ,latitude=%s ,longitude=%s  WHERE numero = installations.numero",(numero,nom,adresse,code_postal,ville,latitude,longitude))
 		except Exception:
 			print("le numero n'existe pas")
 
@@ -292,4 +304,6 @@ class Dao:
 		try:
 			self.cur.execute("DROP TABLE IF EXISTS installation")
 		except Error.IntegrityError:
-			print("TABLE installations : ne peut etre supprimee car une ou plusieurs clefs etrangeres sont presentes")						
+			print("TABLE installation : ne peut etre supprimee car une ou plusieurs clefs etrangeres sont presentes")
+		except AttributeError:
+			print("TABLE installation : ne peut etre supprimee car vous n'êtes pas connecté")							

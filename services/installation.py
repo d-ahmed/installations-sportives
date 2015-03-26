@@ -20,18 +20,19 @@ def recherche():
         cur = myDataBase.getCursor()
         # Exécution de la requette qui vas récuperer le nom, le numero, la ville, le code postale l'adresse
         # de l'installation, le nom de l'activite et le numero d'equipement
-        cur.execute("Select i.nom, i.numero, i.ville, i.adresse, a.nom, i.codePostal, e.numero from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where ville like %s and a.nom like %s",(ville,"%"+activite+"%"))
+        cur.execute("Select i.nom, i.numero, i.ville, i.adresse, a.nom, i.codePostal, e.numero, i.voie from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where ville like %s and a.nom like %s",(ville,"%"+activite+"%"))
         # Récuperation du resultat sous forme de tableau
         rows = cur.fetchall()
         for membre in rows:
             sort={}
-            sort['installation']=(membre[0])
+            sort['nom']=(membre[0])
             sort['numeroInstallation']=(membre[1])
             sort['ville']=(membre[2])
             sort['adresse']=(membre[3])
             sort['activite']=(membre[4])
-            sort['code_postal']=(membre[5])
+            sort['codePostal']=(membre[5])
             sort['numeroEquipement']=(membre[6])
+            sort['voie']=(membre[7])
             resultat.append(sort)
     return {'installations':resultat}
 
