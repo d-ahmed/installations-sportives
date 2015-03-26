@@ -7,6 +7,11 @@ import csv
 # connexion a la base de donnee en fonction de l'utilisateur
 print ("daniel ou aurelie ?")
 prenom = input()
+
+while (prenom != "daniel" and prenom != "aurelie"):
+	print ("daniel ou aurelie ?")
+	prenom = input()
+
 print ("Entrer votre mots de passe")
 password = input()
 
@@ -84,7 +89,7 @@ def insertIntoTableInstallation():
 		installations_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
 		next(installations_tableReader,None)
 		for row in installations_tableReader:
-			dao.insertInTableInstallation(row[1],row[0],row[7],row[4],row[2],row[10],row[9])
+			dao.insertInTableInstallation(row[1],row[0], row[6], row[7],row[4],row[2],row[10],row[9])
 	csvfile.close()
 
 	dao.commit()
