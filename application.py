@@ -1,4 +1,6 @@
-from model import Dao 
+import sys
+sys.path.append("model")
+from dao import Dao
 import csv
 
 
@@ -13,7 +15,7 @@ while (prenom != "daniel" and prenom != "aurelie"):
 print ("Entrer votre mots de passe")
 password = input()
 
-dao=Dao.Dao()
+dao=Dao()
 if(prenom=="aurelie"):
 	dao.connexion('infoweb', 'E134705T', 'E134705T', password)
 else:
@@ -60,11 +62,14 @@ def dropForeignKeys():
 	dao.dropForeignKeyActivite()
 
 
-def insertIntoTables():
-	"""
-		Insere les donnees dans les tables installation, equipement, equipements_Assoc_activites et activite
-	"""
 
+
+"""
+	Insere les donnees dans les tables installation, equipement, equipements_Assoc_activites et activite
+"""
+
+
+def insertIntoTableActivite():
 	# Table activite
 	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
 		activite_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -74,6 +79,11 @@ def insertIntoTables():
 			#equip_activ.insertInTableEquipements_Assoc_activites(row[4],row[2])	
 	csvfile.close()
 
+	dao.commit()
+	dao.deconnexion()
+
+
+def insertIntoTableInstallation():
 	# Table installation
 	with open('./csv/installations_table.csv','rt') as csvfile:
 		installations_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -82,7 +92,11 @@ def insertIntoTables():
 			dao.insertInTableInstallation(row[1],row[0], row[6], row[7],row[4],row[2],row[10],row[9])
 	csvfile.close()
 
-	
+	dao.commit()
+	dao.deconnexion()
+
+
+def insertIntoTablesEquipement():
 	# Table equipement
 	with open('./csv/equipements.csv','rt') as csvfile:
 		equipement_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -91,7 +105,11 @@ def insertIntoTables():
 			dao.insertInTableEquipement(row[4],row[5],row[2])
 	csvfile.close()
 
+	dao.commit()
+	dao.deconnexion()
 
+
+def insertIntoTableEquipements_Assoc_activites():
 	# Table equipements_Assoc_activites
 	with open('./csv/equipements_activites_table.csv','rt') as csvfile:
 		equipements_activites_tableReader=csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -105,7 +123,11 @@ def insertIntoTables():
 
 
 
-createTables()
+
+insertIntoTableActivite()
+insertIntoTableInstallation()
+insertIntoTablesEquipement()
+insertIntoTableEquipements_Assoc_activites()
 addForeignKeys()
 insertIntoTables()
 #dropForeignKeys()
