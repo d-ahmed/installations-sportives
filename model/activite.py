@@ -4,9 +4,9 @@ class Activite:
 
 	def __init__(self, numero, nom, numeroEquipement):
 		self.numero = numero
-		self.nom = nom 
+		self.nom = nom.decode()
 		self.numeroEquipement = numeroEquipement
 
 
 	def __repr__(self):
-        return "{} - {} - {}".format(self.numero, self.nom, self.numeroEquipement)	
+		return "{} - {} - {}".format(self.numero, self.nom, self.numeroEquipement)

@@ -62,19 +62,19 @@ $(document).ready(function(){
 				dataType: 'JSON',
     			type: 'GET',
 				success: function (responce) {
-					//console.log(responce);
+					console.log(responce);
 					$(".reponce").remove();
 					$('#error').hide();
 					$.each(responce, function(index,responce) {
 						if(responce[0]){
 							$.each(responce,function(i){
 								//console.log(responce[i].installation);
-								$('<div/>',{id:""+(responce[i].numeroEquipement),class:"reponce "}).appendTo($('#container'));
-								$('<div/>',{class:"panel panel-primary"}).appendTo($("#"+(responce[i].numeroEquipement)));
-								$('<div/>',{class:"panel-heading"}).text(responce[i].installation+" "+responce[i].code_postal+" "+responce[i].ville).appendTo($("#"+(responce[i].numeroEquipement)).find('.panel-primary'));
-								$('<div/>',{class:"panel-body"}).appendTo($("#"+(responce[i].numeroEquipement)).find('.panel-primary'));
-								$('<p/>').text("Activite : "+responce[i].activite).appendTo($("#"+(responce[i].numeroEquipement)).find('.panel-body'));
-								$('<p/>').text("Adresse : "+responce[i].adresse+" "+responce[i].code_postal+" "+responce[i].ville).appendTo($("#"+(responce[i].numeroEquipement)).find('.panel-body'));
+								$('<div/>',{id:""+(responce[i].equipement[0].numero),class:"reponce "}).appendTo($('#container'));
+								$('<div/>',{class:"panel panel-primary"}).appendTo($("#"+(responce[i].equipement[0].numero)));
+								$('<div/>',{class:"panel-heading"}).text(responce[i].installation+" "+responce[i].code_postal+" "+responce[i].ville).appendTo($("#"+(responce[i].equipement[0].numero)).find('.panel-primary'));
+								$('<div/>',{class:"panel-body"}).appendTo($("#"+(responce[i].equipement[0].numero)).find('.panel-primary'));
+								//$('<p/>').text("Activite : "+responce[i].activite).appendTo($("#"+(responce[i].equipement[0].numero)).find('.panel-body'));
+								$('<p/>').text("Adresse : "+responce[i].adresse+" "+responce[i].code_postal+" "+responce[i].ville).appendTo($("#"+(responce[i].equipement[0].numero)).find('.panel-body'));
 							})
 						}else{
 							$('<div/>',{id:'error', class:'col-md-12'}).appendTo('#container');
@@ -89,7 +89,7 @@ $(document).ready(function(){
 				},
 
 				error: function (data, xhr, status, err) {
-					 console.log(data);
+					 //console.log(data);
 					$('#recherche').find('div').each(function(i){
 						if(i<2){
 							$(this).addClass('has-error');

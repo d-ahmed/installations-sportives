@@ -1,7 +1,7 @@
 from bottle import route, static_file, run
 import installations
-import equipement
-import activite
+import equipements
+import activites
 
 
 @route('/<filepath:path>')
