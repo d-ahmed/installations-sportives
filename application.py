@@ -80,7 +80,7 @@ def insertIntoTableActivite():
 	csvfile.close()
 
 	dao.commit()
-	dao.deconnexion()
+
 
 
 def insertIntoTableInstallation():
@@ -93,7 +93,7 @@ def insertIntoTableInstallation():
 	csvfile.close()
 
 	dao.commit()
-	dao.deconnexion()
+
 
 
 def insertIntoTablesEquipement():
@@ -106,7 +106,7 @@ def insertIntoTablesEquipement():
 	csvfile.close()
 
 	dao.commit()
-	dao.deconnexion()
+
 
 
 def insertIntoTableEquipements_Assoc_activites():
@@ -119,16 +119,15 @@ def insertIntoTableEquipements_Assoc_activites():
 	csvfile.close()
 
 	dao.commit()
-	dao.deconnexion()
 
 
 
-
+createTables()
+addForeignKeys()
 insertIntoTableActivite()
 insertIntoTableInstallation()
 insertIntoTablesEquipement()
 insertIntoTableEquipements_Assoc_activites()
-addForeignKeys()
-insertIntoTables()
+dao.deconnexion()
 #dropForeignKeys()
 #dropTables()

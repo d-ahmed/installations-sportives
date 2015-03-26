@@ -1,8 +1,9 @@
 from equipement import Equipement
 class Installation:
-	def __init__(self, numero, nom, adresse, codePostal, ville, latitude, longitude):
+	def __init__(self, numero, nom, voie, adresse, codePostal, ville, latitude, longitude):
 		self.numero = numero
 		self.nom = nom.decode()
+		self.voie=voie
 		self.adresse = adresse.decode()
 		self.codePostal = codePostal
 		self.ville = ville.decode()
