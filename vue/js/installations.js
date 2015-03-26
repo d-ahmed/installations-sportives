@@ -64,6 +64,7 @@ $(document).ready(function(){
 				url:"/installation"+request,
 				dataType: 'JSON',
     			type: 'GET',
+
 				success: function (response) {
 					// Efface les anciens panels
 					$(".monPanel").remove();
@@ -90,6 +91,7 @@ $(document).ready(function(){
 								}
 								// Equipement
 								getEquipement($("#"+(response[i].numeroEquipement)),$("#"+(response[i].numeroEquipement)).attr('id'));
+
 							})
 						}
 						else{
@@ -102,7 +104,7 @@ $(document).ready(function(){
 				},
 
 				error: function (data, xhr, status, err) {
-					 console.log(data);
+					 //console.log(data);
 					$('#recherche').find('div').each(function(i){
 						if(i<2){
 							$(this).addClass('has-error');

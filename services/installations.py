@@ -3,34 +3,81 @@ import sys
 sys.path.append("../model")
 from dao import Dao
 from installation import Installation
+from equipement import Equipement
+from activite import Activite
 import json
 
-"""
 def toInstallations(argument):
-    return Installation(argument[0],argument[1],argument[2],argument[3],argument[4],argument[5],argument[6])
+    installation = Installation(argument[0],argument[1],argument[2],argument[3],argument[4],argument[5],argument[6])
+    dao = Dao()
+    dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    cur = dao.getCursor()
+    cur.execute("Select * from equipement where numeroInstallation = %s ",(argument[0],))
+    rows = cur.fetchall()
+    equipement = list(map(toEquipement, rows))
+    for equipement in equipement:
+        installation.addEquipement(equipement)
+    return installation
 
-def todic(ostr):
-    return ostr.__dict__
+def act(argument):
+    dao = Dao()
+    dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    cur = dao.getCursor()
+    cur.execute("Select * from activite where numero = %s ",(argument[0],))
+    row = cur.fetchone()
+    return row
 
-def installations(activite, ville):
+def toEquipement(argument):
+    equipement = Equipement(argument[0],argument[1],argument[2])
+    dao = Dao()
+    dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    cur = dao.getCursor()
+    rows = cur.execute("Select numeroActivite from equipements_Assoc_activites where numeroEquipement = %s ",(argument[0],))
+    rows = cur.fetchall()
+    listActivite = list(map(act,rows))
+    activite = list(map(toActivite, listActivite))
+    for activite in activite:
+        equipement.addActivite(activite)
+    return equipement
+
+def toActivite(argument):
+    activite = Activite(argument[0],argument[1],argument[2])
+    return activite
+
+def todic(installation):
+    equip = []
+    activit = []
+    for equipement in installation.equipement:
+        for activite in equipement.activite:
+            activit.append(activite.__dict__)
+        dictEquipement = equipement.__dict__
+        dictEquipement['activite']=activit
+        equip.append(dictEquipement)
+    inst=installation.__dict__
+    #del inst[equipement]
+    inst['equipement']=equip
+    return inst
+
+def installation(activite, ville):
     dao = Dao()
     dao.connexion('localhost', 'CreationService', 'root', 'elnida')
     cur = dao.getCursor()
     cur.execute("Select  i.numero, i.nom, i.adresse, i.codePostal, i.ville,  i.latitude, i.longitude from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where ville like %s and a.nom like %s",(ville,"%"+activite+"%"))
     rows = cur.fetchall()
-    installations = list(map(toInstallations, rows))
-    #print (installations)
-    return installations
+    installation = list(map(toInstallations, rows))
+
+    #print (installation)
+    return installation
 
 @route('/installation')
 def recherche():
     # Récuperation des argument passé en paramètre dans l'url
     activite   = request.GET.get('activite',default=None)
     ville = request.GET.get('ville', default=None)
-    items = installations(activite,ville)
+    items = installation(activite,ville)
     myDictionary = (list(map(todic,items)))
-    print (myDictionary)
-    return json.dumps(myDictionary)
+    #print (myDictionary)
+    return {'installations' : myDictionary}
 
 """
 @route('/installation')
@@ -64,7 +111,7 @@ def recherche():
             sort['numeroEquipement']=(membre[6])
             resultat.append(sort)
     return {'installations':resultat}
-
+"""
 
 @route('/ville')
 def recherche():
