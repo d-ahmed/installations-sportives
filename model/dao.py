@@ -17,6 +17,7 @@ class Dao:
  
 
 	def deconnexion(self):
+		self.cur.close()
 		self.conn.close()
 
 
@@ -292,7 +293,7 @@ class Dao:
 
 	def modiffierTableInstallation(self, numero, nom, voie, adresse, codePostal, ville, latitude, longitude):
 		try:
-			self.cur.execute("UPDATE installations SET numero=%s , nom=%s, adresse=%s ,codePostal=%s ,ville=%s ,latitude=%s ,longitude=%s  WHERE numero = installations.numero",(numero,nom,adresse,code_postal,ville,latitude,longitude))
+			self.cur.execute("UPDATE installations SET numero=%s , nom=%s, voie=%s adresse=%s ,codePostal=%s ,ville=%s ,latitude=%s ,longitude=%s  WHERE numero = installations.numero",(numero,nom,voie,adresse,code_postal,ville,latitude,longitude))
 		except Exception:
 			print("le numero n'existe pas")
 

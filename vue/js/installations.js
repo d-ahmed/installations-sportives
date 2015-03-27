@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	var villes = [];
 	var activites = [];
-
+	var installation = []
 	$.ajax({
 		url:"/ville",
 		dataType: 'JSON',
@@ -70,28 +70,31 @@ $(document).ready(function(){
 					$(".monPanel").remove();
 					// Enlève un précédent message d'erreurs si besoin
 					$('#error').hide();
-
+					installation = response;
 					$.each(response, function(index, response) {
 						if(response[0]){
 							$.each(response,function(i){
-								$('<div/>',{id:""+(response[i].numeroEquipement),class:"monPanel"}).appendTo($('.documents'));
-								$('<div/>',{class:"panel panel-primary"}).appendTo($("#"+(response[i].numeroEquipement)));
+								console.log(response[i]);
+								$('<div/>',{id:""+(response[i].numero),class:"monPanel"}).appendTo($('.documents'));
+								$('<div/>',{class:"panel panel-primary"}).appendTo($("#"+(response[i].numero)));
 								
 								// Titre d'un panel
-								$('<div/>',{class:"panel-heading"}).text('#'+i+" "+response[i].nom).appendTo($("#"+(response[i].numeroEquipement)).find('.panel-primary'));
+								$('<div/>',{class:"panel-heading"}).text('#'+i+" "+response[i].nom+" "+response[i].codePostal).appendTo($("#"+(response[i].numero)).find('.panel-primary'));
 								// Création d'un body pour le panel
-								$('<div/>',{class:"panel-body"}).appendTo($("#"+(response[i].numeroEquipement)).find('.panel-primary'));
+								$('<div/>',{class:"panel-body"}).appendTo($("#"+(response[i].numero)).find('.panel-primary'));
 								
 								// Adresse
 								if (response[i].voie == '0') {
-									$("#"+(response[i].numeroEquipement)).find('.panel-body').append('<span class="glyphicon glyphicon-home" aria-hidden="true"></span>'+" "+response[i].adresse+" "+response[i].codePostal+" "+response[i].ville);
+									$("#"+(response[i].numero)).find('.panel-body').append('<span class="glyphicon glyphicon-home" aria-hidden="true"></span>'+" "+response[i].adresse+" "+response[i].codePostal+" "+response[i].ville);
 								}	
 								else {
-									$("#"+(response[i].numeroEquipement)).find('.panel-body').append('<span class="glyphicon glyphicon-home" aria-hidden="true"></span>'+" "+response[i].voie+", "+response[i].adresse+" "+response[i].codePostal+" "+response[i].ville);
+									$("#"+(response[i].numero)).find('.panel-body').append('<span class="glyphicon glyphicon-home" aria-hidden="true"></span>'+" "+response[i].voie+", "+response[i].adresse+" "+response[i].codePostal+" "+response[i].ville);
 								}
 								// Equipement
-								getEquipement($("#"+(response[i].numeroEquipement)),$("#"+(response[i].numeroEquipement)).attr('id'));
-
+								//getEquipement($("#"+(i)),$("#"+(i)).attr('id'));
+								$.each(response[i].equipement,function(e){
+									getEquipement($("#"+(response[i].numero)),response[i].equipement[e].numero);
+								});
 							})
 						}
 						else{
