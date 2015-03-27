@@ -62,7 +62,7 @@ def installation(activite, ville):
     dao = Dao()
     dao.connexion('localhost', 'CreationService', 'root', 'elnida')
     cur = dao.getCursor()
-    cur.execute("Select  i.numero, i.nom, i.adresse, i.codePostal, i.ville,  i.latitude, i.longitude from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where ville like %s and a.nom like %s",(ville,"%"+activite+"%"))
+    cur.execute("Select  i.numero, i.nom, i.adresse, i.codePostal, i.ville, i.latitude, i.longitude from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where ville like %s and a.nom like %s",(ville,"%"+activite+"%"))
     rows = cur.fetchall()
     installation = list(map(toInstallations, rows))
 
