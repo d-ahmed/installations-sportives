@@ -19,4 +19,4 @@ def recherche():
         cur.execute("Select nom from equipement where numero = %s ",(numeroEquipement,))
         responce = cur.fetchone()
         print (responce[0])
-       	return json.dumps((responce[0]))
+       	return json.dumps((responce[0]).decode())

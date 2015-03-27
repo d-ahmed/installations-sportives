@@ -8,7 +8,9 @@ class Dao:
 		self = self
 
 	def connexion(self, host, database, user, password):
-		
+		'''
+			fonction qui connecte à la base de données
+		'''
 		try:
 			self.conn=mysql.connect(host=host, database=database, user=user,password=password)
 			self.cur=self.conn.cursor()

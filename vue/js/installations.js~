@@ -92,13 +92,13 @@ $(document).ready(function(){
 								}
 								// Equipement
 								//getEquipement($("#"+(i)),$("#"+(i)).attr('id'));
-								/*$.each(response[i].equipement,function(e) {
+								$.each(response[i].equipement,function(e) {
 									/*if (response[i].equipement[e].activite) {
 										
-									}
+									}*/
 								
 									//getEquipement($("#"+(response[i].numero)),response[i].equipement[e].numero);
-								});*/
+								});
 							})
 						}
 						else{

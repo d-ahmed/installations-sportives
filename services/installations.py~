@@ -10,7 +10,8 @@ import json
 def toInstallations(argument):
     installation = Installation(argument[0],argument[1],argument[2],argument[3],argument[4],argument[5],argument[6],argument[7])
     dao = Dao()
-    dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    #dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    dao.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
     cur = dao.getCursor()
     cur.execute("Select * from equipement where numeroInstallation = %s ",(argument[0],))
     rows = cur.fetchall()
@@ -22,7 +23,8 @@ def toInstallations(argument):
 def toEquipement(argument):
     equipement = Equipement(argument[0],argument[1],argument[2])
     dao = Dao()
-    dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    #dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    dao.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
     cur = dao.getCursor()
     rows = cur.execute("Select numeroActivite from equipements_Assoc_activites where numeroEquipement = %s ",(argument[0],))
     rows = cur.fetchall()
@@ -39,7 +41,8 @@ def toActivite(argument):
 
 def getActivite(argument):
     dao = Dao()
-    dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    #dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    dao.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
     cur = dao.getCursor()
     cur.execute("Select * from activite where numero = %s ",(argument[0],))
     row = cur.fetchone()
@@ -62,13 +65,10 @@ def todic(installation):
 
 def installation(activite, ville):
     dao = Dao()
-    dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    #dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    dao.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
     cur = dao.getCursor()
-<<<<<<< HEAD
-    cur.execute("Select  i.numero, i.nom, i.adresse, i.codePostal, i.ville, i.latitude, i.longitude from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where ville like %s and a.nom like %s",(ville,"%"+activite+"%"))
-=======
     cur.execute("Select  i.numero, i.nom, i.voie, i.adresse, i.codePostal, i.ville,  i.latitude, i.longitude from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where ville like %s and a.nom like %s",(ville,"%"+activite+"%"))
->>>>>>> 67af7be4f01105e80bcb71309025ce33f3fd8191
     rows = cur.fetchall()
     # Pour éviter les doublons
     rowsbis = list(set(rows))
@@ -91,14 +91,14 @@ def recherche():
 def recherche():
     resultat=[]
     myDataBase=Dao()
-    myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
-    #myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
+    #myDataBase.connexion('localhost', 'CreationService', 'root', 'elnida')
+    myDataBase.connexion('infoweb', 'E134705T', 'E134705T', 'E134705T')
     cur = myDataBase.getCursor()
     cur.execute("Select ville from installation")
     rows = cur.fetchall()
     for membre in rows:
         sort={}
-        sort['ville']=(membre[0]).decode()
+        sort['ville']=(membre[0])
         resultat.append(sort)
     #print(resultat)
     return json.dumps(resultat)
