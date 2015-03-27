@@ -44,7 +44,7 @@ def toEquipement(argument):
     rows = cur.fetchall()
 
     # création de l'object
-    listObjectActivite = list(map(getActivite,rows))
+    listActivite = list(map(getActivite,rows))
     activite = list(map(toActivite, listActivite))
     for activite in activite:
         equipement.addActivite(activite)
