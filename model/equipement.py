@@ -12,5 +12,5 @@ class Equipement:
 		self.activite.append(activite)
 	
 	def __repr__(self):
-		return "{} - {} - {}".format(self.numero, self.nom, self.numeroInstallation)	
+		return "{} - {} - {} - {}".format(self.numero, self.nom, self.numeroInstallation, self.activite)	
 		

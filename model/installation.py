@@ -15,4 +15,4 @@ class Installation:
 		self.equipement.append(equipement)
 
 	def __repr__(self):
-	 	return "{} - {} - {} - {} - {} - {} - {}".format(self.numero, self.nom, self.adresse, self.codePostal, self.ville, self.latitude, self.longitude)	
+	 	return "{} - {} - {} - {} - {} - {} - {} - {}".format(self.numero, self.nom, self.adresse, self.codePostal, self.ville, self.latitude, self.longitude, self.equipement)	

@@ -15,8 +15,11 @@ def toInstallations(argument):
     cur.execute("Select * from equipement where numeroInstallation = %s ",(argument[0],))
     rows = cur.fetchall()
     equipement = list(map(toEquipement, rows))
-    for equipement in equipement:
-        installation.addEquipement(equipement)
+    #print (equipement)
+    for equip in equipement:
+        #print (equip)
+        installation.addEquipement(equip)
+    print (installation)
     return installation
 
 def toEquipement(argument):
@@ -24,16 +27,25 @@ def toEquipement(argument):
     dao = Dao()
     dao.connexion('localhost', 'CreationService', 'root', 'elnida')
     cur = dao.getCursor()
+    #print ("numeroEquipement :",argument[0])
     rows = cur.execute("Select numeroActivite from equipements_Assoc_activites where numeroEquipement = %s ",(argument[0],))
     rows = cur.fetchall()
+    #print (rows)
+
     listActivite = list(map(getActivite,rows))
+    #print (listActivite)
+    # récupération de toutes les activite pour un installation
     activite = list(map(toActivite, listActivite))
-    for activite in activite:
-        equipement.addActivite(activite)
+    #print (activite)
+    #print (activite)
+    for act in activite:
+        #print (act)
+        equipement.addActivite(act)
+    #print("---------------------------- Fin --------------------------------------------")
     return equipement
 
 def toActivite(argument):
-    activite = Activite(argument[0],argument[1],argument[2])
+    activite = Activite(argument[0][0],argument[0][1],argument[0][2])
     return activite
 
 
@@ -41,12 +53,14 @@ def getActivite(argument):
     dao = Dao()
     dao.connexion('localhost', 'CreationService', 'root', 'elnida')
     cur = dao.getCursor()
-    cur.execute("Select * from activite where numero = %s ",(argument[0],))
-    row = cur.fetchone()
+    cur.execute("Select numero, nom, numeroEquipement from activite where numero = %s ",(argument[0],))
+    row = cur.fetchall()
+    #print(row[2])
+    #print (row)
     return row
 
 
-
+# A revoir pour ameliorer la performance
 def todic(installation):
     listEquipement = []
     listActivite = []
@@ -54,8 +68,10 @@ def todic(installation):
         for activite in equipement.activite:
             listActivite.append(activite.__dict__)
         dictEquipement = equipement.__dict__
+        # On remplace l'objet activite en dictionnaire
         dictEquipement['activite']=listActivite
         listEquipement.append(dictEquipement)
+        listActivite=[]
     inst=installation.__dict__
     inst['equipement']=listEquipement
     return inst
