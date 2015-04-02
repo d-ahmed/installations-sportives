@@ -1,0 +1,2 @@
+http://github.com/sebprunier/
+Exposer des service rest puis les réutiliser avec du html et javascript
