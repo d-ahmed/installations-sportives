@@ -89,6 +89,19 @@ def installation(activite, ville):
     #print (installation)
     return installation
 
+def installationAvecCodePostal(activite, codePostal):
+    dao = Dao()
+    dao.connexion('localhost', 'CreationService', 'root', 'elnida')
+    cur = dao.getCursor()
+    cur.execute("Select  i.numero, i.nom, i.voie, i.adresse, i.codePostal, i.ville,  i.latitude, i.longitude from installation i JOIN equipement e on i.numero=e.numeroInstallation JOIN equipements_Assoc_activites ea on e.numero=ea.numeroEquipement JOIN activite a on a.numero=ea.numeroActivite where codePostal like %s and a.nom like %s",(codePostal,"%"+activite+"%"))
+    rows = cur.fetchall()
+    # Pour éviter les doublons
+    rowsbis = list(set(rows))
+    installation = list(map(toInstallations, rowsbis))
+
+    #print (installation)
+    return installation
+
 @route('/installation')
 def recherche():
     # Récuperation des argument passé en paramètre dans l'url

@@ -53,6 +53,7 @@ $(document).ready(function(){
 
 			var request="";
 			if($('#ville').val() && $('#activite').val()) {
+				//if(jQuery.type( parseInt($('ville').val()))=="number" && )
 				request='?ville='+$('#ville').val()+"&activite="+$('#activite').val();
 			}
 
