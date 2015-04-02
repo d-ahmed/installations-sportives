@@ -92,13 +92,16 @@ $(document).ready(function(){
 								}
 								// Equipement
 								//getEquipement($("#"+(i)),$("#"+(i)).attr('id'));
-								/*$.each(response[i].equipement,function(e) {
-									/*if (response[i].equipement[e].activite) {
-										
-									}
-								
-									//getEquipement($("#"+(response[i].numero)),response[i].equipement[e].numero);
-								});*/
+
+								$.each(response[i].equipement,function(e){
+									$.each(act = response[i].equipement[e].activite, function(a){
+
+										if((act[a].nom).contains('Basket')){
+											$("#"+(response[i].numero)).find('.panel-body').append('<br><br><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>'+" "+response[i].equipement[e].nom);
+										}
+									});
+								});
+
 							})
 						}
 						else{
@@ -129,24 +132,6 @@ function base(arg){
 	console.log(arg);
 }
 
-
-function getEquipement(equipement, id){
-	$.ajax({
-		url:"/equipement?id="+id,
-		dataType: 'JSON',
-    	//jsonpCallback: 'callback',
-    	type: 'GET',
-
-		success: function (response) {
-			$('#equipement').remove();
-			equipement.find('.panel-body').append('<br><br><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>'+" "+response);
-		},
-
-		error: function (data, xhr, status, err) {
-			
-		}, 
-	});
-}
 
 //cleanArray removes all duplicated elements
 function cleanArray(array) {
