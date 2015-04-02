@@ -74,8 +74,9 @@ $(document).ready(function(){
 					installation = response;
 					$.each(response, function(index, response) {
 						if(response[0]){
+							//console.log(response);
 							$.each(response,function(i){
-								console.log(response[i]);
+								//console.log(response[i]);
 								$('<div/>',{id:""+(response[i].numero),class:"monPanel"}).appendTo($('.documents'));
 								$('<div/>',{class:"panel panel-primary"}).appendTo($("#"+(response[i].numero)));
 								
@@ -93,12 +94,14 @@ $(document).ready(function(){
 								}
 								// Equipement
 								//getEquipement($("#"+(i)),$("#"+(i)).attr('id'));
-								$.each(response[i].equipement,function(e){
-									$.each(act = response[i].equipement[e].activite, function(a){
+							
 
-										if((act[a].nom).contains('Basket')){
+								$.each(res = response[i].equipement,function(e){
+									//console.log(res);
+									$.each(act = response[i].equipement[e].activite, function(a){
+										//if((act[a].nom).contains('Basket')){
 											$("#"+(response[i].numero)).find('.panel-body').append('<br><br><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>'+" "+response[i].equipement[e].nom);
-										}
+										//}
 									});
 								});
 							})

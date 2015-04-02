@@ -4,7 +4,7 @@ class Activite:
 
 	def __init__(self, numero, nom, numeroEquipement):
 		self.numero = numero
-		self.nom = nom.decode()
+		self.nom = nom
 		self.numeroEquipement = numeroEquipement
 
 

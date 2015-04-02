@@ -122,11 +122,11 @@ def insertIntoTableEquipements_Assoc_activites():
 
 #createTables()
 #addForeignKeys()
-insertIntoTableActivite()
-insertIntoTableInstallation()
-insertIntoTablesEquipement()
-insertIntoTableEquipements_Assoc_activites()
+#insertIntoTableActivite()
+#insertIntoTableInstallation()
+#insertIntoTablesEquipement()
+#insertIntoTableEquipements_Assoc_activites()
 #dao.deconnexion()
 
-#dropForeignKeys()
-#dropTables()
+dropForeignKeys()
+dropTables()

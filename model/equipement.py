@@ -4,7 +4,7 @@ class Equipement:
 
 	def __init__(self, numero, nom, numeroInstallation):
 		self.numero = numero
-		self.nom = nom.decode()
+		self.nom = nom
 		self.numeroInstallation = numeroInstallation
 		self.activite = []
 

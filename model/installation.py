@@ -2,11 +2,11 @@ from equipement import Equipement
 class Installation:
 	def __init__(self, numero, nom, voie, adresse, codePostal, ville, latitude, longitude):
 		self.numero = numero
-		self.nom = nom.decode()
+		self.nom = nom
 		self.voie=voie
-		self.adresse = adresse.decode()
+		self.adresse = adresse
 		self.codePostal = codePostal
-		self.ville = ville.decode()
+		self.ville = ville
 		self.latitude = latitude
 		self.longitude = longitude
 		self.equipement = []
