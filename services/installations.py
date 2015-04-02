@@ -28,7 +28,7 @@ def toInstallations(argument):
     #print (equipement)
     for equip in equipement:
         #print (equip)
-        installation.addEquipement(equip)
+        objectInstallation.addEquipement(equip)
     print (installation)
     return installation
 
